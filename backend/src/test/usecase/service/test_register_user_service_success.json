@@ -1,0 +1,52 @@
+[
+    {
+        "description": "定義された初期値でユーザーの新規登録ができることのテスト",
+        "db": [
+            {
+                "ID": "1",
+                "DataType": "user",
+                "UserInfo": {
+                    "is_google_linked": false,
+                    "google_config": null,
+                    "default_length": {
+                        "work": 25,
+                        "rest": 5
+                    }
+                }
+            }
+        ],
+        "request": {
+            "user_id": "2",
+            "password": "Passw0rd"
+        },
+        "answer": [
+            {
+                "ID": "2",
+                "DataType": "user",
+                "UserInfo": {
+                    "password": "Passw0rd",
+                    "is_google_linked": false,
+                    "google_config": null,
+                    "default_length": {
+                        "work": 25,
+                        "rest": 5
+                    }
+                }
+            },
+            {
+                "ID": "2_task",
+                "DataType": "root",
+                "DataValue": "False",
+                "TaskInfo": {
+                    "name": "HOME",
+                    "shortcut_flg": false,
+                    "children_task_id": [],
+                    "finished_workload": 105120000,
+                    "estimated_workload": 105120000,
+                    "deadline": "2200-12-31",
+                    "notes": ""
+                }
+            }
+        ]
+    }
+]

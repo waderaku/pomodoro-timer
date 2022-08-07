@@ -1,0 +1,25 @@
+[
+    {
+        "description": "存在しないユーザーを取得できないことのテスト",
+        "db": [
+            {
+                "ID": "1",
+                "DataType": "user",
+                "UserInfo": {
+                    "is_google_linked": false,
+                    "google_config": null,
+                    "default_length": {
+                        "work": 25,
+                        "rest": 5
+                    }
+                }
+            }
+        ],
+        "request": {
+            "user_id": "2"
+        },
+        "answer": {
+            "error_message": "当該ユーザーは存在しません"
+        }
+    }
+]
