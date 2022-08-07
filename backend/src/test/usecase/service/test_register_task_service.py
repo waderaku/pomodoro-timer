@@ -1,19 +1,21 @@
 import json
 from datetime import datetime
 from decimal import Decimal
-from test.common import TEST_PATH, initial_process
+from test.common import SERVICE_PATH, initial_process
 from test.db_util import fetch_deadline_task, fetch_task, fetch_task_by_task_id
 
 import pytest
 from app.usecase.service.register_event_service import register_event_service
 from app.usecase.service.register_task_service import register_task_service
 
-test_data_success_path = TEST_PATH.joinpath("test_register_task_service_success.json")
+test_data_success_path = SERVICE_PATH.joinpath(
+    "test_register_task_service_success.json"
+)
 with test_data_success_path.open("r") as f:
     test_data_success_list: list = json.load(f, parse_float=Decimal)
 
 
-test_data_failed_path = TEST_PATH.joinpath("test_register_task_service_failed.json")
+test_data_failed_path = SERVICE_PATH.joinpath("test_register_task_service_failed.json")
 with test_data_failed_path.open("r") as f:
     test_data_failed_list: list = json.load(f, parse_float=Decimal)
 

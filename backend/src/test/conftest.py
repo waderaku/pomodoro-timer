@@ -1,5 +1,5 @@
 import subprocess
-from test.common import TEST_PATH
+from test.common import SERVICE_PATH
 
 import inject
 import pytest
@@ -13,7 +13,7 @@ def setup_container():
         r"docker run --rm -d --name test-dynamodb -p 8001:8001 --net=pomodoro-timer amazon/dynamodb-local ",
         shell=True,
     )
-    path = TEST_PATH.joinpath(".env")
+    path = SERVICE_PATH.joinpath(".env")
     load_env(path)
     inject.configure(inject_config)
     yield

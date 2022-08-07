@@ -1,16 +1,16 @@
 import json
 from decimal import Decimal
-from test.common import TEST_PATH, initial_process
+from test.common import SERVICE_PATH, initial_process
 
 import pytest
 from app.usecase.service.authorize_service import authorize_service
 
-test_data_success_path = TEST_PATH.joinpath("test_authorize_service_success.json")
+test_data_success_path = SERVICE_PATH.joinpath("test_authorize_service_success.json")
 with test_data_success_path.open("r") as f:
     test_data_success_list: list = json.load(f, parse_float=Decimal)
 
 
-test_data_failed_path = TEST_PATH.joinpath("test_authorize_service_failed.json")
+test_data_failed_path = SERVICE_PATH.joinpath("test_authorize_service_failed.json")
 with test_data_failed_path.open("r") as f:
     test_data_failed_list: list = json.load(f, parse_float=Decimal)
 
