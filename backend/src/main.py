@@ -1,6 +1,6 @@
+from pathlib import Path
 import inject
 import uvicorn
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -20,6 +20,7 @@ from app.infrastructure.dynamodb.repository.token_user_dynamo_repository import 
 from app.infrastructure.dynamodb.repository.user_dynamo_repository import (
     UserDynamoRepository,
 )
+from util import load_env
 from urls import api_routing
 
 app = FastAPI(title="Pomodoro-Timerバックエンド")
@@ -50,6 +51,6 @@ def inject_config(binder: inject.Binder):
 
 
 if __name__ == "__main__":
-    load_dotenv("/root/workspaces/pomodoro-backend/pomodoro-timer/app/.env")
+    load_env(Path().joinpath("src", "app", ".env"))
     inject.configure(inject_config)
     uvicorn.run(app, port=9000)

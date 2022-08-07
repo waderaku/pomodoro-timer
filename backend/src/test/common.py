@@ -1,5 +1,9 @@
+from pathlib import Path
 from test.db_util import clear_and_insert
 from typing import Tuple
+
+TEST_PATH = Path().joinpath("src", "test", "usecase", "service").resolve()
+print(f"************{TEST_PATH}**************")
 
 
 def initial_process(test_data: dict) -> Tuple[dict, dict]:

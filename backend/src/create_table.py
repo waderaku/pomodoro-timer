@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 
 import boto3
-from dotenv import load_dotenv
+
+from util import load_env
 
 
 def create_table():
@@ -37,5 +39,5 @@ def create_table():
 
 
 if __name__ == "__main__":
-    load_dotenv("/root/workspaces/pomodoro-backend/pomodoro-timer/app/.env")
+    load_env(Path().joinpath("src", "app", ".env"))
     create_table()
