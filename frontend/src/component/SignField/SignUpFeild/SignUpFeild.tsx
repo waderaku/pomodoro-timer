@@ -16,8 +16,13 @@ import { ChangeEvent } from "react";
  * さらに、このSignUpFeildはSignInFeildから遷移される想定
  */
 const SignUpFeild = () => {
-  const { userData, handleUpdateUserId, handleUpdatePassword, createUser } =
-    useUserViewModel();
+  const {
+    userData,
+    handleUpdateUserId,
+    handleUpdatePassword,
+    toSignIn,
+    createUser,
+  } = useUserViewModel();
 
   return (
     <Grid container justifyContent="center">
@@ -82,13 +87,8 @@ const SignUpFeild = () => {
               justifyContent="space-evenly"
               alignItems="center"
             >
-              <Button
-                size="small"
-                onClick={() => {
-                  //signInButtonでき次第戻る
-                }}
-              >
-                return
+              <Button size="small" onClick={toSignIn}>
+                To SignIn Menu
               </Button>
               <Button size="small" onClick={createUser}>
                 register
