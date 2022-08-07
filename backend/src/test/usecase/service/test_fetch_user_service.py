@@ -1,24 +1,13 @@
 import json
 from decimal import Decimal
-from pathlib import Path
-from test.common import initial_process
+from test.common import TEST_PATH, initial_process
 
 import pytest
 from app.domain.model.entity.user import User
 from app.domain.model.value.default_length import DefaultLength
-from app.domain.model.value.google_config import (Calendar, GoogleConfig,
-                                                  TaskList)
+from app.domain.model.value.google_config import Calendar, GoogleConfig, TaskList
 from app.usecase.service.fetch_user_service import fetch_user_service
 
-TEST_PATH = Path("/").joinpath(
-    "root",
-    "workspaces",
-    "pomodoro-backend",
-    "pomodoro-timer",
-    "test",
-    "usecase",
-    "service",
-)
 test_data_success_path = TEST_PATH.joinpath("test_fetch_user_service_success.json")
 with test_data_success_path.open("r") as f:
     test_data_success_list: list = json.load(f, parse_float=Decimal)

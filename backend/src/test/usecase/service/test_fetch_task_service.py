@@ -1,21 +1,11 @@
 import json
 from dataclasses import asdict
 from decimal import Decimal
-from pathlib import Path
-from test.common import initial_process
+from test.common import TEST_PATH, initial_process
 
 import pytest
 from app.usecase.service.fetch_task_service import fetch_task_service
 
-TEST_PATH = Path("/").joinpath(
-    "root",
-    "workspaces",
-    "pomodoro-backend",
-    "pomodoro-timer",
-    "test",
-    "usecase",
-    "service",
-)
 test_data_success_path = TEST_PATH.joinpath("test_fetch_task_service_success.json")
 with test_data_success_path.open("r") as f:
     test_data_success_list: list = json.load(f, parse_float=Decimal)

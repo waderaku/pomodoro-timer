@@ -1,22 +1,12 @@
 import json
 from datetime import datetime
 from decimal import Decimal
-from pathlib import Path
-from test.common import initial_process
-from test.db_util import clear_and_insert, fetch_event, fetch_task
+from test.common import TEST_PATH, initial_process
+from test.db_util import fetch_event, fetch_task
 
 import pytest
 from app.usecase.service.register_event_service import register_event_service
 
-TEST_PATH = Path("/").joinpath(
-    "root",
-    "workspaces",
-    "pomodoro-backend",
-    "pomodoro-timer",
-    "test",
-    "usecase",
-    "service",
-)
 test_data_success_path = TEST_PATH.joinpath("test_register_event_service_success.json")
 with test_data_success_path.open("r") as f:
     test_data_success_list: list = json.load(f, parse_float=Decimal)
