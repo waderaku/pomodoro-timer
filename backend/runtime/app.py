@@ -20,8 +20,8 @@ from chalicelib.infrastructure.dynamodb.repository.token_user_dynamo_repository 
     TokenUserDynamoRepository
 from chalicelib.infrastructure.dynamodb.repository.user_dynamo_repository import \
     UserDynamoRepository
+from chalicelib.urls import app_routing
 from chalicelib.util import load_env
-from runtime.chalicelib.urls import app_routing
 
 app = Chalice(app_name="backend")
 dynamodb = boto3.resource("dynamodb")
@@ -38,4 +38,4 @@ def inject_config(binder: inject.Binder):
 load_env(Path().joinpath("chalicelib", ".env"))
 inject.configure(inject_config)
 
-app_routing()
+app_routing(app)
