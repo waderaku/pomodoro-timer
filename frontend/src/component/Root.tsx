@@ -2,7 +2,7 @@ import { useSetRecoilState } from "recoil";
 import TaskManager from "./TaskManager";
 import ToolNavi from "./ToolNavi";
 import SideNavi from "./SideNavi";
-import SignFeild from "./SignField";
+import SignFeild from "./SignArea";
 import { selectedTaskIdState, userIdState } from "domain/hooks/taskViewModel";
 import { useUserViewModel } from "domain/hooks/userViewModel";
 import { useEffect, Suspense } from "react";
@@ -11,7 +11,7 @@ import { ROOT_TASK_ID } from "commonConstants";
 
 const Root = () => {
   // テスト用
-  const { token } = useUserViewModel();
+  const { isUserSignIn } = useUserViewModel();
   const testUserId = "1";
   const setUserId = useSetRecoilState(userIdState);
   const defaultSelectedTaskId = ROOT_TASK_ID;
@@ -21,9 +21,9 @@ const Root = () => {
     setSelectedTaskId(defaultSelectedTaskId);
     // eslint-disable-next-line
   }, []);
-  if (token) {
+  if (isUserSignIn) {
     return (
-      <Suspense fallback={<Typography>Loading...</Typography>}>
+      <div>
         <ToolNavi />
         <Toolbar />
         <Grid container>
@@ -34,7 +34,7 @@ const Root = () => {
             <TaskManager />
           </Grid>
         </Grid>
-      </Suspense>
+      </div>
     );
   } else {
     return <SignFeild />;

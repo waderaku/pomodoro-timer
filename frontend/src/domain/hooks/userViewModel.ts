@@ -1,13 +1,20 @@
-import { AouthToken, SignInOrUpFlag, UserData } from "../model";
+import {
+  AouthToken,
+  isSignInAreaFlag,
+  isUserSignInFlag,
+  UserData,
+} from "../model";
 import { registerUserAPI, signInUserAPI } from "backendApi";
-import { atom, useRecoilState } from "recoil";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { ChangeEvent } from "react";
 
 export const useUserViewModel = () => {
   const [userData, setUserData] = useRecoilState(userDataState);
   const [token, setToken] = useRecoilState(aouthTokenState);
-  const [isSignIn, setIsSignIn] = useRecoilState(isSignInState);
-
+  const [isSignIn, setIsSignIn] = useRecoilState(isSignInAreaState);
+  console.log(isSignIn);
+  const isUserSignIn = useRecoilValue(isUserSignInSelector);
+  console.log(isUserSignIn);
   const handleUpdateUserId = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -54,6 +61,7 @@ export const useUserViewModel = () => {
 
   return {
     token,
+    isUserSignIn,
     userData,
     isSignIn,
     handleUpdateUserId,
@@ -78,7 +86,15 @@ const aouthTokenState = atom<AouthToken>({
   default: "",
 });
 
-const isSignInState = atom<SignInOrUpFlag>({
+const isSignInAreaState = atom<isSignInAreaFlag>({
   key: "isSignIn",
   default: true,
+});
+
+const isUserSignInSelector = selector<isUserSignInFlag>({
+  key: "isUserSignIn",
+  get: async ({ get }) => {
+    console.log(get(aouthTokenState));
+    return Boolean(get(aouthTokenState));
+  },
 });

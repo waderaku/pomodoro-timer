@@ -1,5 +1,5 @@
-import SignInFeild from "./SignInFeild";
-import SignUpFeild from "./SignUpFeild";
+import SignInFeild from "./SignInArea";
+import SignUpFeild from "./SignUpArea";
 import { useUserViewModel } from "domain/hooks/userViewModel";
 
 const SignFeild = () => {

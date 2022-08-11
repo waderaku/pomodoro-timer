@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import SignField from "component/SignField";
+import SignField from "component/SignArea";
 import { RecoilRoot } from "recoil";
 
 export default {
