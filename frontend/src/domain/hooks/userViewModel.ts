@@ -12,9 +12,8 @@ export const useUserViewModel = () => {
   const [userData, setUserData] = useRecoilState(userDataState);
   const [token, setToken] = useRecoilState(aouthTokenState);
   const [isSignIn, setIsSignIn] = useRecoilState(isSignInAreaState);
-  console.log(isSignIn);
   const isUserSignIn = useRecoilValue(isUserSignInSelector);
-  console.log(isUserSignIn);
+
   const handleUpdateUserId = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -54,6 +53,10 @@ export const useUserViewModel = () => {
     setToken(token);
   };
 
+  const signOutUser = () => {
+    setToken("");
+  };
+
   const createUser = async () => {
     await registerUserAPI(userData);
     setIsSignIn(!isSignIn);
@@ -70,6 +73,7 @@ export const useUserViewModel = () => {
     toSignUp,
     createUser,
     signInUser,
+    signOutUser,
   };
 };
 
