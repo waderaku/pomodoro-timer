@@ -1,23 +1,24 @@
 import traceback
 
+from chalice import Response
+from chalice.app import Request
 from chalicelib.domain.exception.custom_exception import (
     MissMatchPasswordException,
     NoExistUserException,
     PasswordIsInvalidException,
 )
-from chalicelib.presentation.http.request.auth_user_request import AuthUser
 from chalicelib.usecase.service.login_service import login_service
-from fastapi import HTTPException
 
 
-async def login(request: AuthUser):
+def login(request: Request):
     try:
-        token_user = login_service(user_id=request.userId, password=request.password)
-        return token_user._auth_token.value
+        body = request.json_body
+        token_user = login_service(user_id=body["userId"], password=body["password"])
+        return Response(body=token_user._auth_token.value, status_code=200)
     except (
         NoExistUserException,
         PasswordIsInvalidException,
         MissMatchPasswordException,
     ):
         traceback.print_exc()
-        raise HTTPException(status_code=400, detail="ユーザIDもしくはパスワードが違います")
+        return Response(body="ユーザIDもしくはパスワードが違います", status_code=400)
