@@ -10,6 +10,7 @@ import {
   TaskName,
   UserId,
   UserData,
+  AouthToken,
 } from "domain/model";
 
 const BACKEND_URI = process.env.REACT_APP_BACKEND_URL;
@@ -203,8 +204,27 @@ export const registerEventAPI = async (
     });
 };
 
+export const signInUserAPI = async (userData: UserData) => {
+  const endpoint = BACKEND_URI + "login";
+  const headers = {
+    headers: { "Content-Type": "application/json" },
+  };
+  const eventData = {
+    userId: userData.userId,
+    password: userData.password,
+  };
+  return await axios
+    .post<AouthToken>(endpoint, eventData, headers)
+    .then((res) => res.data)
+    .catch((err) => {
+      throw new Error(
+        `Unexpected API Response from ${endpoint}.\nError: ${err}`
+      );
+    });
+};
+
 export const registerUserAPI = async (userData: UserData) => {
-  const endpoint = BACKEND_URI + "user/";
+  const endpoint = BACKEND_URI + "user";
   const headers = {
     headers: { "Content-Type": "application/json" },
   };

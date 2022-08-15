@@ -1,4 +1,5 @@
-import React from "react";
+import { Typography } from "@mui/material";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { RecoilRoot } from "recoil";
 import Root from "./component/Root";
@@ -7,7 +8,9 @@ import reportWebVitals from "./reportWebVitals";
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <Root />
+      <Suspense fallback={<Typography>Loading...</Typography>}>
+        <Root />
+      </Suspense>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
