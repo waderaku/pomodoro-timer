@@ -12,8 +12,8 @@ export type ShortcutFlg = boolean;
 export type TimerWorking = "none" | "Full" | "Mini";
 export type Password = string;
 export type AouthToken = string;
-export type isSignInAreaFlag = boolean;
-export type isUserSignInFlag = boolean;
+export type IsSignInArea = boolean;
+export type OnSignIn = boolean;
 
 export type Task = {
   id: TaskId;

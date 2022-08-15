@@ -87,7 +87,7 @@ const SignInFeild = () => {
                 To SignUp Menu
               </Button>
               <Button size="small" onClick={signInUser}>
-                log in
+                Sign in
               </Button>
             </Grid>
           </CardActions>
