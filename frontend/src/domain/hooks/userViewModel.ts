@@ -1,7 +1,7 @@
-import { AouthToken, IsSignInArea, OnSignIn, UserData } from "../model";
 import { registerUserAPI, signInUserAPI } from "backendApi";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { ChangeEvent } from "react";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { AouthToken, IsSignInArea, OnSignIn, UserData } from "../model";
 
 export const useUserViewModel = () => {
   const [userData, setUserData] = useRecoilState(userDataState);
@@ -80,7 +80,7 @@ const userDataState = atom<UserData>({
   },
 });
 
-const aouthTokenState = atom<AouthToken>({
+export const aouthTokenState = atom<AouthToken>({
   key: "aouthToken",
   default: "",
 });

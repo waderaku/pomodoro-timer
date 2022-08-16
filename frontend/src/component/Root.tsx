@@ -1,17 +1,17 @@
-import { useSetRecoilState } from "recoil";
-import TaskManager from "./TaskManager";
-import ToolNavi from "./ToolNavi";
-import SideNavi from "./SideNavi";
-import SignFeild from "./SignArea";
+import { Grid, Toolbar } from "@mui/material";
+import { ROOT_TASK_ID } from "commonConstants";
 import { selectedTaskIdState, userIdState } from "domain/hooks/taskViewModel";
 import { useUserViewModel } from "domain/hooks/userViewModel";
-import { useEffect, Suspense } from "react";
-import { Grid, Toolbar, Typography } from "@mui/material";
-import { ROOT_TASK_ID } from "commonConstants";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import SideNavi from "./SideNavi";
+import SignFeild from "./SignArea";
+import TaskManager from "./TaskManager";
+import ToolNavi from "./ToolNavi";
 
 const Root = () => {
   // テスト用
-  const { isUserSignIn } = useUserViewModel();
+  const { isSignIn } = useUserViewModel();
   const testUserId = "1";
   const setUserId = useSetRecoilState(userIdState);
   const defaultSelectedTaskId = ROOT_TASK_ID;
@@ -21,7 +21,7 @@ const Root = () => {
     setSelectedTaskId(defaultSelectedTaskId);
     // eslint-disable-next-line
   }, []);
-  if (isUserSignIn) {
+  if (isSignIn) {
     return (
       <div>
         <ToolNavi />
