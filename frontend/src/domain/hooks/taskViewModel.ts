@@ -33,12 +33,12 @@ import {
   TaskViewModel,
   UserId,
 } from "../model";
-import { aouthTokenState } from "./userViewModel";
+import { authTokenState } from "./userViewModel";
 
 const taskResponseState = selector<TaskResponse>({
   key: "taskResponse",
   get: async ({ get }) => {
-    const token = get(aouthTokenState);
+    const token = get(authTokenState);
     if (!token) {
       throw Error("User is not yet logged in");
     }
@@ -125,7 +125,7 @@ export const useHasChildTask = (taskId: TaskId) => {
 
 export const useTaskViewModel = (taskId: TaskId): TaskViewModel => {
   const task = useRecoilValue(taskState(taskId));
-  const token = useRecoilValue(aouthTokenState);
+  const token = useRecoilValue(authTokenState);
   // TaskCreatorとサイドバーのプロジェクトの追加で使われるタスク追加
   const refresh = useRecoilRefresher_UNSTABLE(taskPoolState);
   const createTask = async (

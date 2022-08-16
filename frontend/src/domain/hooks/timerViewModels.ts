@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { Second, TaskId, Timer, TimerViewModel } from "domain/model";
 import { useTimer } from "react-timer-hook";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { aouthTokenState } from "./userViewModel";
+import { authTokenState } from "./userViewModel";
 
 export const timerState = atom<Timer>({
   key: "timer",
@@ -19,7 +19,7 @@ export const timerState = atom<Timer>({
 
 export const useTimerViewModel = (): TimerViewModel => {
   const [timer, setTimer] = useRecoilState(timerState);
-  const token = useRecoilValue(aouthTokenState);
+  const token = useRecoilValue(authTokenState);
 
   const setTime = (time: Second): Date => {
     const expiryTimestamp = new Date();

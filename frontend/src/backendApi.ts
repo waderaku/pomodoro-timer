@@ -1,7 +1,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import {
-  AouthToken,
+  AuthToken,
   Deadline,
   Minute,
   Notes,
@@ -63,7 +63,7 @@ const intoDomainTask = (apitask: APITask): TaskTuple => {
   };
 };
 
-export const fetchTaskAPI = async (token: AouthToken) => {
+export const fetchTaskAPI = async (token: AuthToken) => {
   const endpoint = BACKEND_URI + "task";
   const idHeader = {
     Authorization: token,
@@ -95,7 +95,7 @@ export const fetchTaskAPI = async (token: AouthToken) => {
     });
 };
 
-export const updateTaskAPI = async (token: AouthToken, task: Task) => {
+export const updateTaskAPI = async (token: AuthToken, task: Task) => {
   const endpoint = BACKEND_URI + "task/" + task.id;
 
   const idHeader = {
@@ -123,7 +123,7 @@ export const updateTaskAPI = async (token: AouthToken, task: Task) => {
 };
 
 export const registerTaskAPI = async (
-  token: AouthToken,
+  token: AuthToken,
   parentId: TaskId,
   name: TaskName,
   estimatedWorkload: Minute,
@@ -156,7 +156,7 @@ export const registerTaskAPI = async (
     });
 };
 
-export const deleteTaskAPI = async (token: AouthToken, taskId: TaskId) => {
+export const deleteTaskAPI = async (token: AuthToken, taskId: TaskId) => {
   const endpoint = BACKEND_URI + "task/" + taskId;
   const idHeader = {
     Authorization: token,
@@ -175,7 +175,7 @@ export const deleteTaskAPI = async (token: AouthToken, taskId: TaskId) => {
 };
 
 export const registerEventAPI = async (
-  token: AouthToken,
+  token: AuthToken,
   taskId: TaskId,
   start: Date,
   end: Date
@@ -212,7 +212,7 @@ export const signInUserAPI = async (userData: UserData) => {
     password: userData.password,
   };
   return await axios
-    .post<AouthToken>(endpoint, eventData, headers)
+    .post<AuthToken>(endpoint, eventData, headers)
     .then((res) => res.data)
     .catch((err) => {
       throw new Error(
