@@ -11,7 +11,7 @@ import ToolNavi from "./ToolNavi";
 
 const Root = () => {
   // テスト用
-  const { isSignIn } = useUserViewModel();
+  const { onSignIn } = useUserViewModel();
   const testUserId = "1";
   const setUserId = useSetRecoilState(userIdState);
   const defaultSelectedTaskId = ROOT_TASK_ID;
@@ -21,7 +21,7 @@ const Root = () => {
     setSelectedTaskId(defaultSelectedTaskId);
     // eslint-disable-next-line
   }, []);
-  if (isSignIn) {
+  if (onSignIn) {
     return (
       <div>
         <ToolNavi />
