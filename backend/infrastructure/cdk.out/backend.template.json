@@ -2,6 +2,63 @@
  "Transform": "AWS::Serverless-2016-10-31",
  "AWSTemplateFormatVersion": "2010-09-09",
  "Resources": {
+  "pomodoroinfoB048ABB0": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "ID",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "DataType",
+      "KeyType": "RANGE"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "ID",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "DataType",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "DataValue",
+      "AttributeType": "S"
+     }
+    ],
+    "LocalSecondaryIndexes": [
+     {
+      "IndexName": "dataValueLSIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "ID",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "DataValue",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 5,
+     "WriteCapacityUnits": 5
+    },
+    "TableName": "pomodoro_info"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "backend/pomodoro_info/Resource"
+   }
+  },
   "DefaultRole": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -268,10 +325,91 @@
     }
    }
   },
+  "ChaliceAppDefaultRolePolicyCAAAC186": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "pomodoroinfoB048ABB0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "pomodoroinfoB048ABB0",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ChaliceAppDefaultRolePolicyCAAAC186",
+    "Roles": [
+     {
+      "Fn::Select": [
+       1,
+       {
+        "Fn::Split": [
+         "/",
+         {
+          "Fn::Select": [
+           5,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::GetAtt": [
+               "DefaultRole",
+               "Arn"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "backend/ChaliceApp/DefaultRole/Policy/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWNzQ6CMBCEn8V7WaNc9AgmJp4k+ACktFVX+kPYbYwhvLstnObb2Z3ZI5QnOOzklwqlh8JiD/ODpRpEsrqZyk4SGSaosggqoY5qMFxLMgKlg8vTt8EaQYnnNFyjV4zBi8TViIuw0vVa5rvGTA6J0nIRa1169EL/EsqGqJ9hcjInO/TKRm1y5LZhLrtHHiNnag2FOKnVvQSvkdfK5sfv4PclnOFw3H0IsZiiZ3QG2k3/vyZn/+0AAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01OTW/CMAz9LdxTT9ALHAFp0k5DHffKTQLzmjioToSqqv99ScuB03v2+7B3UO9hu8GnVNr0laMOpp+Iuld51U5mZPTB5OUVO2fV+cYLmZXULYrYKHAskGc4Jd3beEKxitDDlM1NyKFLcKTHkl1ZDr/kz8Q6UuCiHR80K4e+MwjFagdPIlmcVWMlpEEv579TfKSolqP50TvxXWkXkrmFwWMpa4m1S8aWlq+VluB7yTmwobh0X8b4G/ijhgNsd5s/IaqGxJG8hWbFf6VqdeAjAQAA"
    },
    "Metadata": {
     "aws:cdk:path": "backend/CDKMetadata/Default"
@@ -280,6 +418,11 @@
   }
  },
  "Outputs": {
+  "AppTableName": {
+   "Value": {
+    "Ref": "pomodoroinfoB048ABB0"
+   }
+  },
   "RestAPIId": {
    "Value": {
     "Ref": "RestAPI"

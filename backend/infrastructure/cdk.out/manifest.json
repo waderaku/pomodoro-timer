@@ -23,7 +23,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1762c9e75a150c305231404e885305814ecc9d327f7a9890ad3bc5eee8e6ccab.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/ce338ac77204ff4b28a9d0375f71ede661c3c5bac44135526faf2405f3995e5d.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -39,6 +39,26 @@
         "backend.assets"
       ],
       "metadata": {
+        "/backend/pomodoro_info": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "pomodoroinfoB048ABB0"
+            }
+          }
+        ],
+        "/backend/pomodoro_info/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "pomodoroinfoB048ABB0"
+          }
+        ],
+        "/backend/AppTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppTableName"
+          }
+        ],
         "/backend/ChaliceApp/ChaliceApp": [
           {
             "type": "aws:cdk:logicalId",
@@ -103,6 +123,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "EndpointURL"
+          }
+        ],
+        "/backend/ChaliceApp/DefaultRole/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ChaliceAppDefaultRolePolicyCAAAC186"
           }
         ],
         "/backend/CDKMetadata/Default": [

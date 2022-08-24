@@ -16,6 +16,92 @@
         "id": "backend",
         "path": "backend",
         "children": {
+          "pomodoro_info": {
+            "id": "pomodoro_info",
+            "path": "backend/pomodoro_info",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "backend/pomodoro_info/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "ID",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "DataType",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "ID",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "DataType",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "DataValue",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "localSecondaryIndexes": [
+                      {
+                        "indexName": "dataValueLSIndex",
+                        "keySchema": [
+                          {
+                            "attributeName": "ID",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "DataValue",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    },
+                    "tableName": "pomodoro_info"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.38.1"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "backend/pomodoro_info/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.38.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.38.1"
+            }
+          },
+          "AppTableName": {
+            "id": "AppTableName",
+            "path": "backend/AppTableName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.38.1"
+            }
+          },
           "ChaliceApp": {
             "id": "ChaliceApp",
             "path": "backend/ChaliceApp",
@@ -441,6 +527,112 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.cloudformation_include.CfnInclude",
+                  "version": "2.38.1"
+                }
+              },
+              "DefaultRole": {
+                "id": "DefaultRole",
+                "path": "backend/ChaliceApp/DefaultRole",
+                "children": {
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "backend/ChaliceApp/DefaultRole/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "backend/ChaliceApp/DefaultRole/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "pomodoroinfoB048ABB0",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "pomodoroinfoB048ABB0",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/index/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "ChaliceAppDefaultRolePolicyCAAAC186",
+                            "roles": [
+                              {
+                                "Fn::Select": [
+                                  1,
+                                  {
+                                    "Fn::Split": [
+                                      "/",
+                                      {
+                                        "Fn::Select": [
+                                          5,
+                                          {
+                                            "Fn::Split": [
+                                              ":",
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "DefaultRole",
+                                                  "Arn"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.38.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.38.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
                   "version": "2.38.1"
                 }
               }
