@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { Second, TaskId, Timer, TimerViewModel } from "domain/model";
 import { useTimer } from "react-timer-hook";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { userIdState } from "./taskViewModel";
+import { authTokenState } from "./userViewModel";
 
 export const timerState = atom<Timer>({
   key: "timer",
@@ -19,7 +19,7 @@ export const timerState = atom<Timer>({
 
 export const useTimerViewModel = (): TimerViewModel => {
   const [timer, setTimer] = useRecoilState(timerState);
-  const userId = useRecoilValue(userIdState);
+  const token = useRecoilValue(authTokenState);
 
   const setTime = (time: Second): Date => {
     const expiryTimestamp = new Date();
@@ -47,7 +47,7 @@ export const useTimerViewModel = (): TimerViewModel => {
   const startTask = (taskId: TaskId) => {
     if (timer.taskId !== taskId && timer.taskId) {
       registerEventAPI(
-        userId,
+        token,
         timer.taskId,
         timer.start.toDate(),
         dayjs().toDate()
@@ -72,7 +72,7 @@ export const useTimerViewModel = (): TimerViewModel => {
   const changeTaskBreak = () => {
     if (timer.isTask && timer.taskId) {
       registerEventAPI(
-        userId,
+        token,
         timer.taskId,
         timer.start.toDate(),
         dayjs().toDate()
