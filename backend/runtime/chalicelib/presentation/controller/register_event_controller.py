@@ -1,4 +1,5 @@
 import traceback
+from typing import Optional
 
 from chalice import Response
 from chalice.app import Request
@@ -9,7 +10,7 @@ from chalicelib.domain.exception.custom_exception import (
 from chalicelib.usecase.service.register_event_service import register_event_service
 
 
-def register_event(request: Request):
+def register_event(request: Request) -> Optional[Response]:
     body = request.json_body
     user_id = request.context["authorizer"]["user_id"]
     try:

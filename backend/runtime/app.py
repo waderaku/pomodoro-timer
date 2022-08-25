@@ -1,7 +1,5 @@
-import os
 from pathlib import Path
 
-import boto3
 import inject
 from chalice import Chalice
 
@@ -25,8 +23,6 @@ from chalicelib.urls import app_routing
 from chalicelib.util import load_env
 
 app = Chalice(app_name="backend")
-dynamodb = boto3.resource("dynamodb")
-dynamodb_table = dynamodb.Table(os.environ.get("APP_TABLE_NAME", ""))
 
 
 def inject_config(binder: inject.Binder):

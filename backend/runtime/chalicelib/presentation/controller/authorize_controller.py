@@ -3,7 +3,9 @@ import traceback
 from chalice import AuthResponse
 from chalice.app import AuthRequest
 from chalicelib.domain.exception.custom_exception import (
-    ExpiredTokenException, NoExistTokenException)
+    ExpiredTokenException,
+    NoExistTokenException,
+)
 from chalicelib.usecase.service.authorize_service import authorize_service
 
 

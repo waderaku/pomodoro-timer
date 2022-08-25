@@ -3,10 +3,10 @@ from typing import Optional
 
 from chalicelib.domain.model.entity.user import User
 from chalicelib.domain.repository.user_repository import UserRepository
-from chalicelib.infrastructure.dynamodb.model.user_model import (UserInfoModel,
-                                                          UserModel)
-from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import \
-    DynamoRepository
+from chalicelib.infrastructure.dynamodb.model.user_model import UserInfoModel, UserModel
+from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
+    DynamoRepository,
+)
 
 
 class UserDynamoRepository(UserRepository, DynamoRepository):
