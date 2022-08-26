@@ -39,5 +39,5 @@ def create_table():
 
 
 if __name__ == "__main__":
-    load_env(Path().joinpath("src", "app", ".env"))
+    load_env(Path().joinpath("chalicelib", ".env"))
     create_table()
