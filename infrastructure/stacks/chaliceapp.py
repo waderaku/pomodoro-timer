@@ -1,17 +1,12 @@
-import os
+from pathlib import Path
 
+import aws_cdk as cdk
 from aws_cdk import aws_dynamodb as dynamodb
-
-try:
-    from aws_cdk import core as cdk
-except ImportError:
-    import aws_cdk as cdk
-
 from chalice.cdk import Chalice
 
-RUNTIME_SOURCE_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), os.pardir, "runtime"
-)
+# app.pyが置かれるdir
+RUNTIME_SOURCE_DIR = Path(__file__).parents[2].joinpath("backend")
+assert RUNTIME_SOURCE_DIR.joinpath("app.py").exists()
 
 
 class ChaliceApp(cdk.Stack):
@@ -21,7 +16,7 @@ class ChaliceApp(cdk.Stack):
         self.chalice = Chalice(
             self,
             "ChaliceApp",
-            source_dir=RUNTIME_SOURCE_DIR,
+            source_dir=str(RUNTIME_SOURCE_DIR),
             stage_config={
                 "environment_variables": {
                     # 'APP_TABLE_NAME': self.dynamodb_table.table_name,
