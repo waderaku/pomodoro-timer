@@ -4,10 +4,14 @@ from pathlib import Path
 import inject
 from chalice import Chalice
 
+from chalicelib.domain.repository.auth_token_repository import AuthTokenRepository
 from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
 from chalicelib.domain.repository.task_user_repository import TaskUserRepository
 from chalicelib.domain.repository.token_user_repository import TokenUserRepository
 from chalicelib.domain.repository.user_repository import UserRepository
+from chalicelib.infrastructure.dynamodb.repository.auth_token_repository import (
+    AuthTokenDynamoRepository,
+)
 from chalicelib.infrastructure.dynamodb.repository.auth_user_dynamo_repository import (
     AuthUserDynamoRepository,
 )
@@ -31,6 +35,7 @@ def inject_config(binder: inject.Binder):
     binder.bind(TaskUserRepository, TaskUserDynamoRepository())
     binder.bind(AuthUserRepository, AuthUserDynamoRepository())
     binder.bind(TokenUserRepository, TokenUserDynamoRepository())
+    binder.bind(AuthTokenRepository, AuthTokenDynamoRepository())
 
 
 if os.environ.get("ENV", "") == "dev":
