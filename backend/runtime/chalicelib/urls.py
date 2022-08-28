@@ -2,7 +2,6 @@ from typing import Callable, Optional
 
 from chalice import Chalice, Rate
 
-from chalicelib.presentation.controller.authorize_controller import authorize
 from chalicelib.presentation.controller.clean_token_controller import clean_token
 from chalicelib.presentation.controller.delete_task_controller import delete_task
 from chalicelib.presentation.controller.fetch_task_controller import fetch_task
