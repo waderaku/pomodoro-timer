@@ -1,0 +1,126 @@
+[
+  {
+    "description": "期限切れのトークンがすべて削除されることのテスト",
+    "db": [
+      {
+        "ID": "token",
+        "DataType": "000",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "001",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "002",
+        "DataValue": "1",
+        "Deadline": "2000-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "003",
+        "DataValue": "1",
+        "Deadline": "2022-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "004",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      }
+    ],
+    "request": {},
+    "answer": [
+      {
+        "ID": "token",
+        "DataType": "000",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "001",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "004",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      }
+    ]
+  },
+  {
+    "description": "期限切れのトークンが存在しなくても正常終了することのテスト",
+    "db": [
+      {
+        "ID": "token",
+        "DataType": "000",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "001",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "002",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "003",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "004",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      }
+    ],
+    "request": {},
+    "answer": [
+      {
+        "ID": "token",
+        "DataType": "000",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "001",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "002",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "003",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      },
+      {
+        "ID": "token",
+        "DataType": "004",
+        "DataValue": "1",
+        "Deadline": "2100-04-20T22:16:39.287433"
+      }
+    ]
+  }
+]

@@ -70,7 +70,12 @@ def fetch_user(user_id: str) -> dict:
 
 def fetch_token(token: str) -> dict:
     table = _get_pomodoro_table()
-    return table.get_item(Key={"ID": token, "DataType": "token"}).get("Item", None)
+    return table.get_item(Key={"ID": "token", "DataType": token}).get("Item", None)
+
+
+def fetch_token_list() -> dict:
+    table = _get_pomodoro_table()
+    return table.query(KeyConditionExpression=Key("ID").eq("token"))["Items"]
 
 
 def scan_table() -> dict:

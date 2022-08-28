@@ -1,9 +1,10 @@
-from faulthandler import is_enabled
 from typing import Optional
 
 import inject
-from chalicelib.domain.exception.custom_exception import (ExpiredTokenException,
-                                                   NoExistTokenException)
+from chalicelib.domain.exception.custom_exception import (
+    ExpiredTokenException,
+    NoExistTokenException,
+)
 from chalicelib.domain.model.entity.token_user import TokenUser
 from chalicelib.domain.repository.token_user_repository import TokenUserRepository
 
