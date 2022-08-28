@@ -7,7 +7,7 @@ from chalicelib.presentation.http.request.update_task_request import UpdateTaskR
 from chalicelib.usecase.service.update_task_service import update_task_service
 
 
-def update_task(id: str, request: Request):
+def update_task(request: Request,id: str ):
     body = UpdateTaskRequest(**request.json_body)
     user_id = request.context["authorizer"]
 
