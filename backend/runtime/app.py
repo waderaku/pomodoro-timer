@@ -43,5 +43,11 @@ if os.environ.get("ENV", "") == "dev":
     load_env(Path().joinpath("chalicelib", ".env"))
 
 inject.configure(inject_config)
-authorizer = app.authorizer()(authorize)
+
+
+@app.authorizer()
+def authorizer(auth_request):
+    return authorize(auth_request)
+
+
 app_routing(app, authorizer)
