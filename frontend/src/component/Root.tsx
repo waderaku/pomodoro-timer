@@ -1,14 +1,17 @@
+import { Grid, Toolbar } from "@mui/material";
+import { ROOT_TASK_ID } from "commonConstants";
+import { selectedTaskIdState, userIdState } from "domain/hooks/taskViewModel";
+import { useUserViewModel } from "domain/hooks/userViewModel";
+import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import SideNavi from "./SideNavi";
+import SignFeild from "./SignArea";
 import TaskManager from "./TaskManager";
 import ToolNavi from "./ToolNavi";
-import SideNavi from "./SideNavi";
-import { selectedTaskIdState, userIdState } from "domain/hooks/taskViewModel";
-import { useEffect, Suspense } from "react";
-import { Grid, Toolbar, Typography } from "@mui/material";
-import { ROOT_TASK_ID } from "commonConstants";
 
 const Root = () => {
   // テスト用
+  const { onSignIn } = useUserViewModel();
   const testUserId = "1";
   const setUserId = useSetRecoilState(userIdState);
   const defaultSelectedTaskId = ROOT_TASK_ID;
@@ -18,21 +21,24 @@ const Root = () => {
     setSelectedTaskId(defaultSelectedTaskId);
     // eslint-disable-next-line
   }, []);
-
-  return (
-    <Suspense fallback={<Typography>Loading...</Typography>}>
-      <ToolNavi />
-      <Toolbar />
-      <Grid container>
-        <Grid item xs={2}>
-          <SideNavi />
+  if (onSignIn) {
+    return (
+      <div>
+        <ToolNavi />
+        <Toolbar />
+        <Grid container>
+          <Grid item xs={2}>
+            <SideNavi />
+          </Grid>
+          <Grid item xs={10}>
+            <TaskManager />
+          </Grid>
         </Grid>
-        <Grid item xs={10}>
-          <TaskManager />
-        </Grid>
-      </Grid>
-    </Suspense>
-  );
+      </div>
+    );
+  } else {
+    return <SignFeild />;
+  }
 };
 
 export default Root;

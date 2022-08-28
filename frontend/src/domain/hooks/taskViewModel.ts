@@ -33,15 +33,16 @@ import {
   TaskViewModel,
   UserId,
 } from "../model";
+import { authTokenState } from "./userViewModel";
 
 const taskResponseState = selector<TaskResponse>({
   key: "taskResponse",
   get: async ({ get }) => {
-    const userId = get(userIdState);
-    if (!userId) {
+    const token = get(authTokenState);
+    if (!token) {
       throw Error("User is not yet logged in");
     }
-    const taskResponse = await fetchTaskAPI(userId);
+    const taskResponse = await fetchTaskAPI(token);
     return taskResponse;
   },
 });
@@ -124,7 +125,7 @@ export const useHasChildTask = (taskId: TaskId) => {
 
 export const useTaskViewModel = (taskId: TaskId): TaskViewModel => {
   const task = useRecoilValue(taskState(taskId));
-  const userId = useRecoilValue(userIdState);
+  const token = useRecoilValue(authTokenState);
   // TaskCreatorとサイドバーのプロジェクトの追加で使われるタスク追加
   const refresh = useRecoilRefresher_UNSTABLE(taskPoolState);
   const createTask = async (
@@ -135,7 +136,7 @@ export const useTaskViewModel = (taskId: TaskId): TaskViewModel => {
     shortcutFlg: ShortcutFlg
   ) => {
     await registerTaskAPI(
-      userId,
+      token,
       task.id,
       taskName,
       estimatedWorkload,
@@ -151,7 +152,7 @@ export const useTaskViewModel = (taskId: TaskId): TaskViewModel => {
       throw new Error("This task is already done");
     }
     const newTask = { ...task, done: true };
-    await updateTaskAPI(userId, newTask);
+    await updateTaskAPI(token, newTask);
     refresh();
   };
   // Configモーダルでtaskの編集がなされた時
@@ -170,11 +171,11 @@ export const useTaskViewModel = (taskId: TaskId): TaskViewModel => {
       notes,
       shortcutFlg,
     };
-    updateTaskAPI(userId, newTask);
+    updateTaskAPI(token, newTask);
     refresh();
   };
   const deleteTask = () => {
-    deleteTaskAPI(userId, taskId);
+    deleteTaskAPI(token, taskId);
     refresh();
   };
   const setSelectedTaskId = useSetRecoilState(selectedTaskIdState);

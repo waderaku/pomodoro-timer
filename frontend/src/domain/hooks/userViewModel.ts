@@ -1,10 +1,13 @@
-import { UserData } from "../model";
-import { registerUserAPI } from "backendApi";
-import { atom, useRecoilState } from "recoil";
+import { registerUserAPI, signInUserAPI } from "backendApi";
 import { ChangeEvent } from "react";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { AuthToken, IsSignInArea, OnSignIn, UserData } from "../model";
 
 export const useUserViewModel = () => {
   const [userData, setUserData] = useRecoilState(userDataState);
+  const [token, setToken] = useRecoilState(authTokenState);
+  const [isSignIn, setIsSignIn] = useRecoilState(isSignInAreaState);
+  const onSignIn = useRecoilValue(onSignInSelector);
 
   const handleUpdateUserId = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -14,6 +17,7 @@ export const useUserViewModel = () => {
       userId: e.target.value,
     });
   };
+
   const handleUpdatePassword = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -23,14 +27,48 @@ export const useUserViewModel = () => {
     });
   };
 
+  const resetUserIdAndPassword = () => {
+    setUserData({
+      userId: "",
+      password: "",
+    });
+  };
+
+  const toSignIn = () => {
+    setIsSignIn(!isSignIn);
+  };
+
+  const toSignUp = () => {
+    resetUserIdAndPassword();
+    setIsSignIn(!isSignIn);
+  };
+
+  const signInUser = async () => {
+    const token = await signInUserAPI(userData);
+    setToken(token);
+  };
+
+  const signOutUser = () => {
+    setToken("");
+  };
+
   const createUser = async () => {
     await registerUserAPI(userData);
+    setIsSignIn(!isSignIn);
   };
+
   return {
+    token,
+    onSignIn,
     userData,
+    isSignIn,
     handleUpdateUserId,
     handleUpdatePassword,
+    toSignIn,
+    toSignUp,
     createUser,
+    signInUser,
+    signOutUser,
   };
 };
 
@@ -39,5 +77,22 @@ const userDataState = atom<UserData>({
   default: {
     userId: "",
     password: "",
+  },
+});
+
+export const authTokenState = atom<AuthToken>({
+  key: "authToken",
+  default: "",
+});
+
+const isSignInAreaState = atom<IsSignInArea>({
+  key: "isSignIn",
+  default: true,
+});
+
+const onSignInSelector = selector<OnSignIn>({
+  key: "isSignedIn",
+  get: async ({ get }) => {
+    return Boolean(get(authTokenState));
   },
 });
