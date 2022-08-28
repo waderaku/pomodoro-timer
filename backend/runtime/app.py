@@ -9,7 +9,7 @@ from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
 from chalicelib.domain.repository.task_user_repository import TaskUserRepository
 from chalicelib.domain.repository.token_user_repository import TokenUserRepository
 from chalicelib.domain.repository.user_repository import UserRepository
-from chalicelib.infrastructure.dynamodb.repository.auth_token_repository import (
+from chalicelib.infrastructure.dynamodb.repository.auth_token_dynamo_repository import (
     AuthTokenDynamoRepository,
 )
 from chalicelib.infrastructure.dynamodb.repository.auth_user_dynamo_repository import (
