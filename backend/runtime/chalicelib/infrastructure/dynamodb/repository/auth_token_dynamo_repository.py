@@ -8,7 +8,7 @@ from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
 
 
 class AuthTokenDynamoRepository(AuthTokenRepository, DynamoRepository):
-    def find_all(self):
+    def find_all(self) -> list[AuthToken]:
         item_list = self._table.query(KeyConditionExpression=Key("ID").eq("token"))[
             "Items"
         ]

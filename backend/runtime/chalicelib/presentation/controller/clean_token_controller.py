@@ -3,7 +3,7 @@ import logging
 from chalicelib.usecase.service.crean_token_service import crean_token_service
 
 
-def crean_token(event: dict):
+def clean_token(event: dict):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     logger.info("期限切れのトークンを探索します")
