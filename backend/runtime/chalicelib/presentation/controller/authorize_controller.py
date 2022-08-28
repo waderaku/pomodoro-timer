@@ -9,7 +9,8 @@ from chalicelib.domain.exception.custom_exception import (
 from chalicelib.usecase.service.authorize_service import authorize_service
 
 
-def authorize(request: AuthRequest) -> AuthResponse:
+def authorize(request: AuthRequest, context) -> AuthResponse:
+    print(request)
     try:
         token_user = authorize_service(request.token)
         return AuthResponse(

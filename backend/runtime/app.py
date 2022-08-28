@@ -24,6 +24,7 @@ from chalicelib.infrastructure.dynamodb.repository.token_user_dynamo_repository 
 from chalicelib.infrastructure.dynamodb.repository.user_dynamo_repository import (
     UserDynamoRepository,
 )
+from chalicelib.presentation.controller.authorize_controller import authorize
 from chalicelib.urls import app_routing
 from chalicelib.util import load_env
 
@@ -42,5 +43,5 @@ if os.environ.get("ENV", "") == "dev":
     load_env(Path().joinpath("chalicelib", ".env"))
 
 inject.configure(inject_config)
-
-app_routing(app)
+authorizer = app.authorizer()(authorize)
+app_routing(app, authorizer)
