@@ -1,20 +1,31 @@
+import json
+from chalice import Response
+from chalice.app import Request
 from chalicelib.presentation.http.response.task_response import (
     TaskData,
     TaskModel,
     TaskResponse,
 )
 from chalicelib.usecase.service.fetch_task_service import Task, fetch_task_service
-from fastapi import Header
+
 
 table_name = "pomodoro_info"
 
 
-async def fetch_task(userId: str = Header(None)) -> list[TaskResponse]:
-    task_list = fetch_task_service(user_id=userId)
+def fetch_task(request: Request) -> Response:
+    user_id = request.context["authorizer"]["user_id"]
+
+    task_list = fetch_task_service(user_id=user_id)
     response_task_list = _create_response_task_list(task_list)
     shortcut_id_list = [task.task_id for task in task_list if task.shortcut_flg]
 
-    return TaskResponse(task=response_task_list, shortcutTaskId=shortcut_id_list)
+    body_dict = json.loads(
+        TaskResponse(
+            task=response_task_list, 
+            shortcutTaskId=shortcut_id_list
+        ).json()
+    )
+    return Response(body=body_dict)
 
 
 def _create_response_task_list(task_list: list[Task]):
