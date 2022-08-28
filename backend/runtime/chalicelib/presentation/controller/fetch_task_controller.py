@@ -17,11 +17,12 @@ def fetch_task(request: Request) -> Response:
 
     task_list = fetch_task_service(user_id=user_id)
     response_task_list = _create_response_task_list(task_list)
-    shortcut_id_list = [task.task_id for task in task_list if task.shortcut_flg]
+    shortcut_id_list = [
+        task.task_id for task in task_list if task.shortcut_flg]
 
     body_dict = json.loads(
         TaskResponse(
-            task=response_task_list, 
+            task=response_task_list,
             shortcutTaskId=shortcut_id_list
         ).json()
     )

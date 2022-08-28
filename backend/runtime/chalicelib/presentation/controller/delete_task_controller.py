@@ -2,13 +2,12 @@ import traceback
 from chalice import Response
 from chalice.app import Request
 from chalicelib.domain.exception.custom_exception import (DeleteRootTaskException,
-                                                   NoExistTaskException,
-                                                   NoExistUserException)
+                                                          NoExistTaskException,
+                                                          NoExistUserException)
 from chalicelib.usecase.service.delete_task_service import delete_task_service
 
 
-
-def delete_task(request: Request,id: str):
+def delete_task(request: Request, id: str):
     user_id = request.context["authorizer"]["user_id"]
 
     try:
