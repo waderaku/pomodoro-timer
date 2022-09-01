@@ -8,7 +8,7 @@ class S3Bucket(Stack):
         super().__init__(scope, id, **kwargs)
         self.bucket = Bucket(
             self,
-            id="PomodoroTimerFrontencBucket",
+            id="PomodoroTimerFrontendBucket",
             bucket_name="pomodoro-front-bucket",
             website_index_document="index.html",
             public_read_access=True,
