@@ -24,7 +24,6 @@ from chalicelib.urls import app_routing
 from chalicelib.util import load_env
 
 app = Chalice(app_name="backend")
-app.api.cors = True
 
 
 def inject_config(binder: inject.Binder):
