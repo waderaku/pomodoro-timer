@@ -33,7 +33,8 @@ def create_table():
                 "Projection": {"ProjectionType": "ALL"},
             },
         ],
-        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+        ProvisionedThroughput={
+            "ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
     )
     return table
 
