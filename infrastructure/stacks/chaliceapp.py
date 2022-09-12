@@ -1,5 +1,3 @@
-import os
-
 from aws_cdk import aws_dynamodb as dynamodb
 
 try:
@@ -8,10 +6,10 @@ except ImportError:
     import aws_cdk as cdk
 
 from chalice.cdk import Chalice
+from constant import PROJECT_ROOT
 
-RUNTIME_SOURCE_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), os.pardir, "runtime"
-)
+CHALICELIB_SOURCE_DIR = PROJECT_ROOT.joinpath("backend")
+assert CHALICELIB_SOURCE_DIR.exists()
 
 
 class ChaliceApp(cdk.Stack):
@@ -21,7 +19,7 @@ class ChaliceApp(cdk.Stack):
         self.chalice = Chalice(
             self,
             "ChaliceApp",
-            source_dir=RUNTIME_SOURCE_DIR,
+            source_dir=str(CHALICELIB_SOURCE_DIR),
             stage_config={
                 "environment_variables": {
                     # 'APP_TABLE_NAME': self.dynamodb_table.table_name,

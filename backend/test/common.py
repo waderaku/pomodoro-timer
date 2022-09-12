@@ -2,7 +2,7 @@ from pathlib import Path
 from test.db_util import clear_and_insert
 from typing import Tuple
 
-TEST_PATH = Path().joinpath("test")
+TEST_PATH = Path(__file__).parent
 SERVICE_PATH = TEST_PATH.joinpath("usecase", "service").resolve()
 
 
