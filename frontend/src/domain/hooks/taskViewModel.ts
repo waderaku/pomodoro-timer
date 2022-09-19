@@ -74,7 +74,14 @@ const useTaskViewModel = (taskId: TaskId): TaskViewModel => {
   const setSelectedTaskId = useSetRecoilState(selectedTaskIdState);
 
   // タスクマネージャー画面へ遷移
-  const toManager = () => setSelectedTaskId(task.id);
+  const toManager = () => setSelectedTaskId(task.id); 
+  // To Hook 画面の処理だけど？
+  // To Component ２箇所からよばれるけど？
+  // このままは？
+  // 画面か否かという基準ではなく、複数から呼ばれるかでHook化するかを決める。
+  // Taskに関わるかでこのHookにまとめるかを決める。
+  // ⇨外だし
+  // 拡張性の懸念はある。一旦ToManager(taskId: TaskId)
 
   return {
     task,
