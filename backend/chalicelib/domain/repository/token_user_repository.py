@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from chalicelib.domain.model.entity.token_user import TokenUser
+from chalicelib.domain.model.entity.token_user import TokenAuthorizer
 
 
 class TokenUserRepository(ABC):
     @abstractmethod
-    def register_token(self, token_user: TokenUser) -> TokenUser:
+    def register_token(self, token_user: TokenAuthorizer) -> TokenAuthorizer:
         """発行したトークンを追加登録する
 
         Args:
@@ -15,7 +15,7 @@ class TokenUserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def find_by_token(self, token: str) -> Optional[TokenUser]:
+    def find_by_token(self, token: str) -> Optional[TokenAuthorizer]:
         """トークンに紐づくデータを取得する
 
         Args:
@@ -27,7 +27,7 @@ class TokenUserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def delete_by_token(self, token: str) :
+    def delete_by_token(self, token: str):
         """トークンに紐づくデータを削除する
 
         Args:

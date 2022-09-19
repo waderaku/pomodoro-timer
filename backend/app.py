@@ -5,7 +5,9 @@ import inject
 from chalice import Chalice
 
 from chalicelib.domain.repository.auth_token_repository import AuthTokenRepository
-from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
+from chalicelib.domain.repository.auth_user_repository import (
+    PasswordAuthorizerRepository,
+)
 from chalicelib.domain.repository.task_user_repository import TaskUserRepository
 from chalicelib.domain.repository.token_user_repository import TokenUserRepository
 from chalicelib.domain.repository.user_repository import UserRepository
@@ -34,7 +36,7 @@ app = Chalice(app_name="backend")
 def inject_config(binder: inject.Binder):
     binder.bind(UserRepository, UserDynamoRepository())
     binder.bind(TaskUserRepository, TaskUserDynamoRepository())
-    binder.bind(AuthUserRepository, AuthUserDynamoRepository())
+    binder.bind(PasswordAuthorizerRepository, AuthUserDynamoRepository())
     binder.bind(TokenUserRepository, TokenUserDynamoRepository())
     binder.bind(AuthTokenRepository, AuthTokenDynamoRepository())
 

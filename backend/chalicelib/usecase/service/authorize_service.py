@@ -5,7 +5,7 @@ from chalicelib.domain.exception.custom_exception import (
     ExpiredTokenException,
     NoExistTokenException,
 )
-from chalicelib.domain.model.entity.token_user import TokenUser
+from chalicelib.domain.model.entity.token_user import TokenAuthorizer
 from chalicelib.domain.repository.token_user_repository import TokenUserRepository
 
 
@@ -13,7 +13,7 @@ from chalicelib.domain.repository.token_user_repository import TokenUserReposito
 def authorize_service(
     token: str,
     token_user_repository: Optional[TokenUserRepository] = None,
-) -> TokenUser:
+) -> TokenAuthorizer:
     token_user = token_user_repository.find_by_token(token)
 
     if not token_user:

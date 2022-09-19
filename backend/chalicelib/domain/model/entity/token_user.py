@@ -8,13 +8,13 @@ from chalicelib.domain.model.value.auth_token import AuthToken
 TOKEN_EXPIRED_DAYS = 1
 
 
-class TokenUser:
+class TokenAuthorizer:
     def __init__(self, user_id: str, auth_token: AuthToken):
         self._user_id = user_id
         self._auth_token = auth_token
 
     @classmethod
-    def create(cls, user_id: str) -> TokenUser:
+    def create(cls, user_id: str) -> TokenAuthorizer:
         return cls(
             user_id=user_id,
             auth_token=AuthToken(
