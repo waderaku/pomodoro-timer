@@ -1,5 +1,5 @@
 import { ListItem, ListItemButton, ListItemText, Paper } from "@mui/material";
-import { useTaskViewModel } from "domain/hooks/taskViewModel";
+import useTaskViewModel from "domain/hooks/taskViewModel";
 import { TaskId } from "domain/model";
 
 const RootTaskCard = (props: { taskId: TaskId }) => {

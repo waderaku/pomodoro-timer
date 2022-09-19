@@ -1,4 +1,4 @@
-import { useTaskConfigViewModel } from "domain/hooks/taskViewModel";
+import useTaskConfigViewModel from "domain/hooks/taskConfigViewModel";
 import TaskConfig from "./TaskConfig";
 
 const TaskConfigModal = () => {

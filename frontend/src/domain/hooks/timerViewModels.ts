@@ -1,9 +1,9 @@
 import { registerEventAPI } from "backendApi";
 import dayjs from "dayjs";
+import { authTokenState } from "domain/hooks/core";
 import { Second, TaskId, Timer, TimerViewModel } from "domain/model";
 import { useTimer } from "react-timer-hook";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { authTokenState } from "./userViewModel";
 
 export const timerState = atom<Timer>({
   key: "timer",

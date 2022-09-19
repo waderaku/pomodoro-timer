@@ -1,8 +1,8 @@
 import { Box, Divider, List } from "@mui/material";
-import { useShortcutTaskArray } from "domain/hooks/taskViewModel";
+import { ROOT_TASK_ID } from "commonConstants";
+import { useShortcutTaskArray } from "domain/hooks/core";
 import { TaskId } from "domain/model";
 import RootTaskCard from "./RootTaskCard";
-import { ROOT_TASK_ID } from "commonConstants";
 
 const SideNavi = () => {
   const shortcutTaskArray = useShortcutTaskArray();

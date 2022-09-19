@@ -1,12 +1,12 @@
-import { Card, Box, Grid, IconButton, Typography } from "@mui/material";
-import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
-import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import { FC } from "react";
+import { Box, Card, Grid, IconButton, Typography } from "@mui/material";
+import useTaskViewModel from "domain/hooks/taskViewModel";
 import { useTimerViewModel } from "domain/hooks/timerViewModels";
-import { useTaskViewModel } from "domain/hooks/taskViewModel";
 import { useWindowDimensions } from "domain/hooks/windowDemention";
+import { FC } from "react";
 
 const FullwindowTimer = () => {
   const {

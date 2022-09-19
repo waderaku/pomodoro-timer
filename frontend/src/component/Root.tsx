@@ -1,6 +1,6 @@
 import { Grid, Toolbar } from "@mui/material";
 import { ROOT_TASK_ID } from "commonConstants";
-import { selectedTaskIdState, userIdState } from "domain/hooks/taskViewModel";
+import { selectedTaskIdState, userIdState } from "domain/hooks/core";
 import { useUserViewModel } from "domain/hooks/userViewModel";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
