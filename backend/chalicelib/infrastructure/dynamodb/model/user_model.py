@@ -61,7 +61,7 @@ class UserModel:
         )
 
     @classmethod
-    def to_model(cls, user: User) -> UserModel:
+    def from_user(cls, user: User) -> UserModel:
         """ドメインのユーザオブジェクトをDBに登録する形式に変換する
 
         Args:

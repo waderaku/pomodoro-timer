@@ -22,7 +22,8 @@ def update_user_service(
         user_id (str): ユーザID
         is_google_linked (bool): Googleアカウントと連携する場合True、しない場合False
         default_length (dict[str, int]): 作業時間、休憩時間の基本設定
-        google_config (Optional[dict[str, dict]], optional): Googleアカウントと連携する場合のGoogleカレンダー、タスクのID
+        google_config (Optional[dict[str, dict]], optional):
+            Googleアカウントと連携する場合のGoogleカレンダー、タスクのID
 
     Raises:
         NoExistUserException: 更新対象のユーザが存在しないことを示す例外

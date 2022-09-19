@@ -24,7 +24,7 @@ class TaskModel:
     TaskInfo: TaskInfoModel
 
     @classmethod
-    def to_model(cls, task: Task) -> TaskModel:
+    def from_task(cls, task: Task) -> TaskModel:
         """ドメインのユーザオブジェクトをDBに登録する形式に変換する
 
         Args:

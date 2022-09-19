@@ -1,8 +1,8 @@
 from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
-from chalicelib.infrastructure.dynamodb.model.user_model import (UserInfoModel,
-                                                          UserModel)
-from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import \
-    DynamoRepository
+from chalicelib.infrastructure.dynamodb.model.user_model import UserInfoModel, UserModel
+from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
+    DynamoRepository,
+)
 
 
 class AuthUserDynamoRepository(AuthUserRepository, DynamoRepository):

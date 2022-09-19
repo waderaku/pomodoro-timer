@@ -15,7 +15,7 @@ class TokenUserModel:
     Deadline: str
 
     @classmethod
-    def to_model(cls, token_user: TokenUser) -> TokenUserModel:
+    def from_token_user(cls, token_user: TokenUser) -> TokenUserModel:
         return cls(
             ID="token",
             DataType=token_user._auth_token.value,
