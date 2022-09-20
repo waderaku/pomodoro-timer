@@ -1,5 +1,5 @@
-from backend.chalicelib.domain.exception.custom_exception import NoExistTaskException
-from backend.chalicelib.domain.model.entity.task import ROOT_TASK_ID, Task
+from chalicelib.domain.exception.custom_exception import NoExistTaskException
+from chalicelib.domain.model.entity.task import ROOT_TASK_ID, Task
 
 
 class TaskTree:
@@ -19,12 +19,13 @@ class TaskTree:
             Task: 取得したタスク情報
         """
         if task_id in self.tree:
-            self.tree.get(task_id)
+            return self.tree.get(task_id)
 
         raise NoExistTaskException()
 
     def get_ancestor_list(self, task_id: str) -> list[Task]:
         """タスクIDに紐づくタスクの親タスク一覧を取得する
+        ただし、rootタスクは除く
 
         Args:
             task_id (str): タスクID

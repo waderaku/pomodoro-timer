@@ -104,7 +104,7 @@ class Task:
             children_task_id=[],
             done=False,
             parent_id="",
-            _event_id_list=[],
+            event_id_list=[],
             finished_workload=ROOT_TASK_WORKLOAD,
             estimated_workload=ROOT_TASK_WORKLOAD,
             deadline="2200-12-31",
