@@ -59,8 +59,6 @@ class TaskDynamoModel:
             TaskInfo=task_info_model,
         )
 
-    # TODO CDKでTable定義にparentId加える
-
     def to_task(self) -> Task:
         return Task(
             user_id=self.ID.split("_")[0],
