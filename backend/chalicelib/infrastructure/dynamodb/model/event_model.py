@@ -14,17 +14,6 @@ class EventDynamoModel:
     EndTime: str
 
     @classmethod
-    def create(
-        cls, user_id: str, task_id: str, start: datetime, end: datetime
-    ) -> EventDynamoModel:
-        return cls(
-            ID=f"{user_id}_event",
-            DataType=start.isoformat(),
-            DataValue=task_id,
-            EndTime=end.isoformat(),
-        )
-
-    @classmethod
     def from_event(cls, event: Event) -> EventDynamoModel:
         return cls(
             ID=f"{event.user_id}_event",

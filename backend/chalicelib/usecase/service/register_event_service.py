@@ -35,7 +35,7 @@ def register_event_service(
     # 作業時間
     workload = end - start
     # Event作成
-    event = Event.create(task_id, start, end)
+    event = Event.create(user_id, task_id, start, end)
     # 作業時間の計上
     _add_workload(ancestor_list, workload, task_repository)
     # イベントの登録
