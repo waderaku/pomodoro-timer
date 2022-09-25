@@ -2,12 +2,12 @@ import os
 from datetime import datetime
 
 import boto3
+from boto3.dynamodb.conditions import Key
 from chalicelib.domain.exception.custom_exception import (
     NoExistTaskException,
     UpdateRootTaskException,
 )
 from chalicelib.domain.model.entity.task import ROOT_TASK_ID
-from boto3.dynamodb.conditions import Key
 
 table_name = "pomodoro_info"
 

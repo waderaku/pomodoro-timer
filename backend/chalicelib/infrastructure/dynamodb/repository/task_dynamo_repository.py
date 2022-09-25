@@ -1,6 +1,6 @@
+from chalicelib.domain.model.collection.task_tree import TaskTree
 from boto3.dynamodb.conditions import Key
 from chalicelib.domain.model.entity.task import Task
-from chalicelib.domain.model.value.task_tree import TaskTree
 from chalicelib.domain.repository.task_repository import TaskRepository
 from chalicelib.infrastructure.dynamodb.model.task_model import TaskDynamoModel
 from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
@@ -20,5 +20,6 @@ class TaskDynamoRepository(TaskRepository, DynamoRepository):
     def batch_update_task(self, task_list: list[Task]):
         dynamo_model_list = [TaskDynamoModel.from_task(task) for task in task_list]
         with self._table.batch_writer() as batch:
-            for dynamo_model in dynamo_model_list:
-                batch.put_item(Item=dynamo_model.to_dynamo_input())
+            self.batch_update(dynamo_model_list)
+            # for dynamo_model in dynamo_model_list:
+            #     batch.put_item(Item=dynamo_model.to_dynamo_input())
