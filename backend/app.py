@@ -4,27 +4,9 @@ from pathlib import Path
 import inject
 from chalice import Chalice
 
-from chalicelib.domain.repository.auth_token_repository import AuthTokenRepository
-from chalicelib.domain.repository.auth_user_repository import (
-    PasswordAuthorizerRepository,
-)
-from chalicelib.domain.repository.task_user_repository import TaskUserRepository
-from chalicelib.domain.repository.token_user_repository import TokenUserRepository
-from chalicelib.domain.repository.user_repository import UserRepository
-from chalicelib.infrastructure.dynamodb.repository.auth_token_dynamo_repository import (
-    AuthTokenDynamoRepository,
-)
-from chalicelib.infrastructure.dynamodb.repository.auth_user_dynamo_repository import (
-    AuthUserDynamoRepository,
-)
-from chalicelib.infrastructure.dynamodb.repository.task_user_dynamo_repository import (
-    TaskUserDynamoRepository,
-)
-from chalicelib.infrastructure.dynamodb.repository.token_user_dynamo_repository import (
-    TokenUserDynamoRepository,
-)
-from chalicelib.infrastructure.dynamodb.repository.user_dynamo_repository import (
-    UserDynamoRepository,
+from chalicelib.domain.repository.repository import Repository
+from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
+    DynamoRepository,
 )
 from chalicelib.presentation.controller.authorize_controller import authorize
 from chalicelib.urls import app_routing
@@ -34,11 +16,8 @@ app = Chalice(app_name="backend")
 
 
 def inject_config(binder: inject.Binder):
-    binder.bind(UserRepository, UserDynamoRepository())
-    binder.bind(TaskUserRepository, TaskUserDynamoRepository())
-    binder.bind(PasswordAuthorizerRepository, AuthUserDynamoRepository())
-    binder.bind(TokenUserRepository, TokenUserDynamoRepository())
-    binder.bind(AuthTokenRepository, AuthTokenDynamoRepository())
+    repository = DynamoRepository()
+    binder.bind(Repository, repository)
 
 
 if os.environ.get("ENV", "") == "dev":

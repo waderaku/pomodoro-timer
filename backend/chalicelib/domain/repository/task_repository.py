@@ -18,5 +18,5 @@ class TaskRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def delete_task(self, task_id: str):
+    def delete_task(self, user_id: str, task_id: str):
         raise NotImplementedError

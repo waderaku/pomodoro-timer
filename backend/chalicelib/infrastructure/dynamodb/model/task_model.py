@@ -4,6 +4,7 @@ from dataclasses import asdict, dataclass
 from decimal import ROUND_HALF_UP, Decimal
 
 from chalicelib.domain.model.entity.task import Task
+from chalicelib.infrastructure.dynamodb.model.dynamo_model import DynamoModel
 
 
 @dataclass
@@ -30,7 +31,7 @@ class TaskInfoDynamoModel:
 
 
 @dataclass
-class TaskDynamoModel:
+class TaskDynamoModel(DynamoModel):
     ID: str
     DataType: str
     DataValue: str

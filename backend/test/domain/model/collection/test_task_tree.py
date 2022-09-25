@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 from chalicelib.domain.model.collection.task_tree import TaskTree
-from chalicelib.domain.model.entity.task import Task
+from chalicelib.domain.model.entity.task import ROOT_TASK_ID, Task
 
 TEST_TASK_LIST = [
     Task.create_root("1"),
@@ -10,9 +10,9 @@ TEST_TASK_LIST = [
         user_id="1",
         task_id="1",
         name="test1",
-        shortcut_flg=False,
+        shortcut_flg=True,
         children_task_id=["2", "3"],
-        parent_id="root",
+        parent_id=ROOT_TASK_ID,
         event_id_list=[],
         done=False,
         finished_workload=0,
