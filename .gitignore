@@ -3,3 +3,4 @@ chalice.out
 cdk.out
 __pycache__
 .pytest_cache
+temp*.py

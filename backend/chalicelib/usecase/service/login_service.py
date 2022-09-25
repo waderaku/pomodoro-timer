@@ -1,35 +1,32 @@
-from typing import Optional
-
 import inject
 from chalicelib.domain.exception.custom_exception import NoExistUserException
-from chalicelib.domain.model.entity.auth_user import AuthUser
+from chalicelib.domain.model.entity.authorizer import AuthInfo
 from chalicelib.domain.model.entity.token_user import TokenUser
 from chalicelib.domain.model.value.password import Password
-from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
-from chalicelib.domain.repository.token_user_repository import TokenUserRepository
+from chalicelib.domain.repository.repository import Repository
 
 
 @inject.params(
-    auth_user_repository=AuthUserRepository, token_user_repository=TokenUserRepository
+    repositor=Repository,
 )
 def login_service(
     user_id: str,
     password: str,
-    auth_user_repository: Optional[AuthUserRepository] = None,
-    token_user_repository: Optional[TokenUserRepository] = None,
+    repository: Repository,
 ) -> TokenUser:
-    user = auth_user_repository.find_by_id(user_id)
-    if not user:
+    # TODO Docstring
+    db_auth_info = repository.password_authorizer_repository.find_by_id(user_id)
+    if not db_auth_info:
         raise NoExistUserException()
 
     # user認証
-    auth_user = AuthUser(user_id=user_id, password=Password(password, False))
-    user.authenticate(auth_user)
+    auth_info = AuthInfo(user_id=user_id, password=Password(password, False))
+    db_auth_info.authenticate(auth_info)
 
     # token生成
     token_user = TokenUser.create(user_id=user_id)
 
     # トークン登録
-    token_user_repository.register_token(token_user)
+    repository.auth_token_repository.register_token(token_user)
 
     return token_user

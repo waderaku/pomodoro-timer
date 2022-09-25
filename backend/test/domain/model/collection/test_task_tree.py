@@ -78,5 +78,5 @@ def test_get_task_failed():
 
 
 def test_get_ancestor_list():
-    ancestor_id_list = [task.task_id for task in task_tree.get_ancestor_list("4")]
+    ancestor_id_list = [task.task_id for task in task_tree._get_ancestor_list("4")]
     ancestor_id_list == ["3", "1"]

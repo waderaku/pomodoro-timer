@@ -1,28 +1,16 @@
-import os
-from dataclasses import dataclass
 from datetime import datetime
-from decimal import Decimal
-from uuid import uuid4
 
-import boto3
+import inject
 from chalicelib.domain.exception.custom_exception import (
-    AlreadyDoneParentTaskException,
     NoExistParentTaskException,
+    NoExistTaskException,
     NoExistUserException,
-    NotShortcutTaskException,
 )
-from boto3.dynamodb.conditions import Key
-
-from chalicelib.domain.model.entity.task import ROOT_TASK_ID
-
-table_name = "pomodoro_info"
+from chalicelib.domain.model.entity.task import Task
+from chalicelib.domain.repository.repository import Repository
 
 
-@dataclass
-class Task:
-    task_id: str
-
-
+@inject.params(repository=Repository)
 def register_task_service(
     user_id: str,
     parent_id: str,
@@ -31,157 +19,38 @@ def register_task_service(
     deadline: datetime,
     notes: str,
     shortcut_flg: bool,
+    repository: Repository,
 ):
-    # rootの子タスクの場合shortcut_flgがtrueであること
-    if parent_id == ROOT_TASK_ID and not shortcut_flg:
-        raise NotShortcutTaskException()
+    """新タスクを生成する。
+    1. タスクオブジェクトを作成する
+    2. 親タスクの子タスクリストに新規タスクのtask_idを追加する
+    3. 祖先タスクのestimated_workloadを更新する
+    """
 
-    dynamodb = boto3.resource(
-        "dynamodb", endpoint_url=os.environ.get("DYNAMODB_ENDPOINT", None)
-    )
-    table = dynamodb.Table(table_name)
-
-    # 対象ユーザーの存在確認
-    if not table.get_item(Key={"ID": user_id, "DataType": "user"}).get("Item"):
+    task_tree = repository.task_repository.fetch_task_tree(user_id)
+    if task_tree.is_empty():
         raise NoExistUserException()
 
-    # タスク一覧の取得
-    task_list: list[dict] = table.query(
-        KeyConditionExpression=Key("ID").eq(f"{user_id}_task")
-    )["Items"]
-
-    # 新規追加タスクの作成
-    additional_task_id = str(uuid4())
-    additional_task = {
-        "ID": f"{user_id}_task",
-        "DataType": additional_task_id,
-        "DataValue": "False",
-        "TaskInfo": {
-            "name": name,
-            "children_task_id": [],
-            "finished_workload": Decimal("0.0"),
-            "estimated_workload": estimated_workload,
-            "deadline": deadline.strftime("%Y-%m-%d"),
-            "notes": notes,
-            "shortcut_flg": shortcut_flg,
-        },
-    }
-    additional_task_deadline = {
-        "ID": user_id,
-        "DataType": f"{additional_task_id}_deadline",
-        "DataValue": deadline.strftime("%Y-%m-%d"),
-    }
-    additional_task_name = {
-        "ID": user_id,
-        "DataType": f"{additional_task_id}_name",
-        "DataValue": name,
-    }
-    task_list.append(additional_task)
-
-    update_task_list = []
-    # 親タスクに子タスク情報を追加
-    parent_task_list = list(filter(lambda x: x["DataType"] == parent_id, task_list))
-    if len(parent_task_list) == 0:
-        raise NoExistParentTaskException()
-    parent_task = parent_task_list[0]
-    if parent_task["DataValue"] == "True":
-        raise AlreadyDoneParentTaskException()
-
-    parent_task["TaskInfo"]["children_task_id"].append(additional_task_id)
-
-    # 新規タスク一覧からツリーを展開
-    task_dict = _create_task_dict(task_list)
-    task_tree = _create_root_tree(task_list)
-
-    # そのツリーから元々のタスクの更新
-    update_task_list = _update_task_tree(task_dict, task_tree, additional_task, user_id)
-
-    with table.batch_writer() as batch:
-        for task in update_task_list:
-            batch.put_item(Item=task)
-        batch.put_item(Item=additional_task)
-        batch.put_item(Item=additional_task_deadline)
-        batch.put_item(Item=additional_task_name)
-
-    return Task(additional_task_id)
-
-
-def _update_task_tree(
-    task_dict: dict, task_tree: dict, additional_task: dict, user_id: str
-) -> list[dict]:
-
-    update_deadline = additional_task["TaskInfo"]["deadline"]
-    update_deadline_flg = True
-    update_estimated_workload = additional_task["TaskInfo"]["estimated_workload"]
-    update_estimated_workload_flg = True
-    target_task = task_tree[additional_task["DataType"]]
-    update_task_list = []
-    while True:
-        # 日付更新
-        if update_deadline_flg:
-            target_deadline = target_task["TaskInfo"]["deadline"]
-            if target_deadline < update_deadline:
-                target_task["TaskInfo"]["deadline"] = update_deadline
-                update_task_list.append(
-                    {
-                        "ID": user_id,
-                        "DataType": f"{target_task['DataType']}_deadline",
-                        "DataValue": update_deadline,
-                    }
-                )
-            else:
-                update_deadline_flg = False
-        # 見積もり時間の更新
-        if update_estimated_workload_flg:
-            target_estimated_workload = target_task["TaskInfo"]["estimated_workload"]
-            sum_children_estimated_workload = _sum_children_estimated_workload(
-                task_dict, target_task
-            )
-            if target_estimated_workload < sum_children_estimated_workload:
-                target_task["TaskInfo"][
-                    "estimated_workload"
-                ] = sum_children_estimated_workload
-            else:
-                update_estimated_workload
-
-        # 見積もり時間も日付も更新不要になったら終了
-        if not update_deadline_flg and not update_estimated_workload_flg:
-            break
-
-        update_task_list.append(target_task)
-
-        # 対象を一つ親のタスクに変更
-        target_task = task_tree.get(target_task["DataType"])
-        if not target_task:
-            break
-
-    return update_task_list
-
-
-def _sum_children_estimated_workload(task_dict: dict, target_task: dict):
-    chldren_task_list = [
-        task_dict[child_id] for child_id in target_task["TaskInfo"]["children_task_id"]
-    ]
-
-    return sum(
-        [
-            child_task["TaskInfo"]["estimated_workload"]
-            for child_task in chldren_task_list
-        ]
+    task = Task.create(
+        user_id=user_id,
+        parent_id=parent_id,
+        name=name,
+        estimated_workload=estimated_workload,
+        deadline=deadline,
+        notes=notes,
+        shortcut_flg=shortcut_flg,
     )
 
+    try:
+        parent = task_tree.get_parent(task.task_id)
+    except NoExistTaskException:
+        raise NoExistParentTaskException()
 
-def _create_root_tree(task_list: list[dict]) -> dict:
-    root_dict = {}
+    updated_parent = parent.add_child(task.task_id)
+    updated_ancestor_list = task_tree.update_task_estimated_workload(task)
 
-    for task in task_list:
-        children_id_list = task["TaskInfo"]["children_task_id"]
-        for child_id in children_id_list:
-            root_dict[child_id] = task
-
-    return root_dict
-
-
-def _create_task_dict(task_list: list[dict]) -> dict:
-    task_dict = {task["DataType"]: task for task in task_list}
-    return task_dict
+    with repository.batch_writer():
+        repository.task_repository.register_task(task)
+        repository.task_repository.update_task(updated_parent)
+        for ancestor in updated_ancestor_list:
+            repository.task_repository.update_task(ancestor)

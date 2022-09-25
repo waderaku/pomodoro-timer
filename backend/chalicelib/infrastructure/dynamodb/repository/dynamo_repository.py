@@ -9,3 +9,6 @@ class DynamoRepository:
         pomodoro-infoテーブルオブジェクトを生成する
         """
         self._table = get_pomodoro_table()
+
+    def batch_update(self, model_list: list[DynamoModel]):
+        ...

@@ -1,11 +1,13 @@
-from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
-from chalicelib.infrastructure.dynamodb.model.user_model import (UserInfoModel,
-                                                          UserModel)
-from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import \
-    DynamoRepository
+from chalicelib.domain.repository.auth_user_repository import (
+    PasswordAuthorizerRepository,
+)
+from chalicelib.infrastructure.dynamodb.model.user_model import UserInfoModel, UserModel
+from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
+    DynamoRepository,
+)
 
 
-class AuthUserDynamoRepository(AuthUserRepository, DynamoRepository):
+class AuthUserDynamoRepository(PasswordAuthorizerRepository, DynamoRepository):
     def find_by_id(self, user_id: str):
         user_dict = self._table.get_item(Key={"ID": user_id, "DataType": "user"}).get(
             "Item", None

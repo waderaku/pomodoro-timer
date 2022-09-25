@@ -1,90 +1,73 @@
 from __future__ import annotations
 
-from datetime import datetime
+from copy import deepcopy
+from dataclasses import dataclass, replace
+from datetime import datetime, timedelta
+from uuid import uuid4
+
+from chalicelib.domain.exception.custom_exception import (
+    AlreadyDoneParentTaskException,
+    NotShortcutTaskException,
+)
 
 ROOT_TASK_ID = "root"
 ROOT_TASK_NAME = "HOME"
-ROOT_TASK_WORKLOAD = 105120000
+ROOT_TASK_ESTIMATED_WORKLOAD = timedelta(days=200 * 365)
+ROOT_TASK_INITIAL_WORKLOAD = timedelta(days=0)
 
 
+@dataclass(frozen=True)
 class Task:
     """タスクドメイン"""
 
-    def __init__(
-        self,
+    user_id: str
+    task_id: str
+    name: str
+    shortcut_flg: bool
+    children_task_id: list[str]
+    parent_id: str
+    event_id_list: list[str]
+    done: bool
+    finished_workload: timedelta
+    estimated_workload: timedelta
+    deadline: datetime
+    notes: str
+
+    def __post_init__(self):
+        # rootの子タスクの場合shortcut_flgがtrueであること
+        if self.parent_id == ROOT_TASK_ID and not self.shortcut_flg:
+            raise NotShortcutTaskException()
+
+    @classmethod
+    def create(
+        cls,
         user_id: str,
-        task_id: str,
         name: str,
-        shortcut_flg: bool,
-        children_task_id: list[str],
         parent_id: str,
-        event_id_list: list[str],
-        done: bool,
-        finished_workload: int,
         estimated_workload: int,
         deadline: datetime,
         notes: str,
+        shortcut_flg: bool,
     ):
-        self._user_id = user_id
-        self._task_id = task_id
-        self._name = name
-        self._shortcut_flg = shortcut_flg
-        self._children_task_id = children_task_id
-        self._parent_id = parent_id
-        self._event_id_list = event_id_list
-        self._done = done
-        self._finished_workload = finished_workload
-        self._estimated_workload = estimated_workload
-        self._deadline = deadline
-        self._notes = notes
-
-    @property
-    def user_id(self) -> str:
-        return self._user_id
-
-    @property
-    def task_id(self) -> str:
-        return self._task_id
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def shortcut_flg(self) -> bool:
-        return self._shortcut_flg
-
-    @property
-    def children_task_id(self) -> list[str]:
-        return self._children_task_id
-
-    @property
-    def parent_id(self) -> str:
-        return self._parent_id
-
-    @property
-    def event_id_list(self) -> list[str]:
-        return self._event_id_list
-
-    @property
-    def done(self) -> bool:
-        return self._done
-
-    @property
-    def finished_workload(self) -> int:
-        return self._finished_workload
-
-    @property
-    def estimated_workload(self) -> int:
-        return self._estimated_workload
-
-    @property
-    def deadline(self) -> datetime:
-        return self._deadline
-
-    @property
-    def notes(self) -> str:
-        return self._notes
+        task_id = str(uuid4())
+        done = False
+        event_id_list = list()
+        children_id_list = list()
+        finished_workload = 0.0
+        return Task(
+            user_id=user_id,
+            task_id=task_id,
+            name=name,
+            shortcut_flg=shortcut_flg,
+            children_task_id=children_id_list,
+            parent_id=parent_id,
+            event_id_list=event_id_list,
+            done=done,
+            finished_workload=finished_workload,
+            estimated_workload=estimated_workload,
+            deadline=deadline,
+            notes=notes,
+        )
 
     @classmethod
     def create_root(cls, user_id: str) -> Task:
@@ -99,14 +82,44 @@ class Task:
         return cls(
             user_id=user_id,
             task_id=ROOT_TASK_ID,
+            parent_id=None,
             name=ROOT_TASK_NAME,
             shortcut_flg=False,
             children_task_id=[],
             done=False,
             parent_id="",
             event_id_list=[],
-            finished_workload=ROOT_TASK_WORKLOAD,
-            estimated_workload=ROOT_TASK_WORKLOAD,
+            finished_workload=ROOT_TASK_INITIAL_WORKLOAD,
+            estimated_workload=ROOT_TASK_ESTIMATED_WORKLOAD,
             deadline="2200-12-31",
             notes="",
         )
+
+    def add_workload(
+        self,
+        workload: timedelta,
+    ) -> Task:
+        """
+        Returns:
+            Task: finished_workloadフィールドがworkloadだけ加算された新インスタンス
+        """
+        return self.update_workload(self.finished_workload + workload)
+
+    def update_workload(self, new_workload: timedelta) -> Task:
+        return replace(self, finished_workload=new_workload)
+
+    def delete_child(self, child_id: str) -> Task:
+        children = deepcopy(self.children_task_id)
+        children.remove(child_id)
+        return replace(self, children_task_id=children)
+
+    def add_child(self, child_id: str) -> Task:
+        if self.done:
+            raise AlreadyDoneParentTaskException()
+        children = deepcopy(self.children_task_id)
+        children.append(child_id)
+        return replace(self, children_task_id=children)
+
+    @classmethod
+    def is_root(cls, task_id: str) -> bool:
+        return task_id == ROOT_TASK_ID

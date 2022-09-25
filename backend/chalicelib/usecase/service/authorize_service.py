@@ -1,26 +1,25 @@
-from typing import Optional
-
 import inject
+from chalicelib.domain.repository.repository import Repository
 from chalicelib.domain.exception.custom_exception import (
     ExpiredTokenException,
     NoExistTokenException,
 )
-from chalicelib.domain.model.entity.token_user import TokenUser
-from chalicelib.domain.repository.token_user_repository import TokenUserRepository
 
 
-@inject.params(token_user_repository=TokenUserRepository)
+@inject.params(repository=Repository)
 def authorize_service(
     token: str,
-    token_user_repository: Optional[TokenUserRepository] = None,
-) -> TokenUser:
-    token_user = token_user_repository.find_by_token(token)
+    repository: Repository,
+) -> str:
+    # TODO Docstring
+    auth_token_repository = repository.auth_token_repository
+    token_user = auth_token_repository.find_token_user_by_token(token)
 
     if not token_user:
         raise NoExistTokenException()
 
     if token_user.is_expired():
-        token_user_repository.delete_by_token(token)
+        auth_token_repository.delete_by_token(token)
         raise ExpiredTokenException()
 
     return token_user
