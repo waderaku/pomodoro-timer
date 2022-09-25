@@ -1,4 +1,4 @@
-import { useTaskDeleteViewModel } from "domain/hooks/taskViewModel";
+import useTaskDeleteViewModel from "domain/hooks/taskDeleteViewModel";
 import TaskDelete from "./TaskDelete";
 
 const TaskDeleteModal = () => {

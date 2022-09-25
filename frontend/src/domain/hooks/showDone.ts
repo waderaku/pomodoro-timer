@@ -1,11 +1,11 @@
+import { taskState } from "domain/hooks/core";
 import { TaskId } from "domain/model";
 import {
   atom,
   selectorFamily,
   useRecoilValue,
-  useSetRecoilState,
+  useSetRecoilState
 } from "recoil";
-import { taskState } from "./taskViewModel";
 
 const doneListState = selectorFamily<boolean[], TaskId[]>({
   key: "doneList",

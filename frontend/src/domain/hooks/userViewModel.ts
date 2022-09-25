@@ -1,7 +1,8 @@
 import { registerUserAPI, signInUserAPI } from "backendApi";
+import { authTokenState } from "domain/hooks/core";
+import { IsSignInArea, OnSignIn, UserData } from "domain/model";
 import { ChangeEvent } from "react";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { AuthToken, IsSignInArea, OnSignIn, UserData } from "../model";
 
 export const useUserViewModel = () => {
   const [userData, setUserData] = useRecoilState(userDataState);
@@ -80,10 +81,7 @@ const userDataState = atom<UserData>({
   },
 });
 
-export const authTokenState = atom<AuthToken>({
-  key: "authToken",
-  default: "",
-});
+
 
 const isSignInAreaState = atom<IsSignInArea>({
   key: "isSignIn",
