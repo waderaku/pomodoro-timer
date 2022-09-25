@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
+from chalicelib.domain.model.collection.task_tree import TaskTree
 from chalicelib.domain.model.entity.task import Task
-from chalicelib.domain.model.value.task_tree import TaskTree
 
 
 class TaskRepository(ABC):
@@ -10,5 +10,13 @@ class TaskRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def batch_update_task(self, task_list: list[Task]):
+    def update_task(self, task: Task):
+        raise NotImplementedError
+
+    @abstractmethod
+    def register_task(self, task: Task):
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_task(self, task_id: str):
         raise NotImplementedError

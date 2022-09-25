@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Optional
 
-from chalicelib.domain.model.entity.authorizer import PasswordAuthorizer
+from chalicelib.domain.model.entity.authorizer import AuthInfo
 from chalicelib.domain.model.entity.user import User
 from chalicelib.domain.model.value.default_length import DefaultLength
 from chalicelib.domain.model.value.google_config import Calendar, GoogleConfig, TaskList
@@ -50,13 +50,13 @@ class UserModel:
             password=Password(self.UserInfo.password, is_hashed=True),
         )
 
-    def to_auth_user(self) -> PasswordAuthorizer:
+    def to_auth_user(self) -> AuthInfo:
         """認証用ユーザを生成する
 
         Returns:
             AuthUser: 認証用ユーザ
         """
-        return PasswordAuthorizer(
+        return AuthInfo(
             user_id=self.ID, password=Password(self.UserInfo.password, True)
         )
 
