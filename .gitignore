@@ -1,0 +1,5 @@
+.vscode
+chalice.out
+cdk.out
+__pycache__
+.pytest_cache

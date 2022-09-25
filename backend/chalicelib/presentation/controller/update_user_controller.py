@@ -12,7 +12,7 @@ from chalicelib.usecase.service.update_user_service import update_user_service
 
 
 def update_user(request: Request) -> Optional[Response]:
-    user_id = request.context["authorizer"]
+    user_id = request.context["authorizer"]["user_id"]
     body = UserModel(**request.json_body)
     default_length = {
         "work": body.defaultLength.work,

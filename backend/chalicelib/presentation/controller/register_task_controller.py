@@ -13,7 +13,7 @@ from chalicelib.usecase.service.register_task_service import register_task_servi
 
 def register_task(request: Request):
     body = RegisterTaskRequest(**request.json_body)
-    user_id = request.context["authorizer"]
+    user_id = request.context["authorizer"]["user_id"]
 
     try:
         task = register_task_service(
