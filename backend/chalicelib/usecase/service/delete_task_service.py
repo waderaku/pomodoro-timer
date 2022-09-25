@@ -38,7 +38,7 @@ def delete_task_service(user_id: str, task_id: str, repository: Repository):
 
     with repository.batch_writer():
         for desc_id in delete_task_id_list:
-            repository.task_repository.delete_task(desc_id)
+            repository.task_repository.delete_task(user_id, desc_id)
         repository.task_repository.update_task(updated_parent)
         for event in updated_event_list:
             repository.event_repository.update_event(event)
@@ -46,73 +46,3 @@ def delete_task_service(user_id: str, task_id: str, repository: Repository):
 
 def _replace_parent(event_list: list[Event], parent_id: str) -> list[Event]:
     return [event.update_task_id(parent_id) for event in event_list]
-
-
-# TODO
-# Comment削除
-#     event_list = table.query(KeyConditionExpression=Key("ID").eq(f"{user_id}_event"))[
-#         "Items"
-#     ]
-#     delete_task_list = _get_delete_task(task_list, task_id)
-
-#     update_list = _get_update_data(event_list, task_list, delete_task_list, task_id)
-#     with table.batch_writer() as batch:
-#         for delete_task in delete_task_list:
-#             batch.delete_item(
-#                 Key={"ID": delete_task["ID"], "DataType": delete_task["DataType"]}
-#             )
-
-#         for update_data in update_list:
-#             batch.put_item(Item=update_data)
-
-
-# def _get_update_data(
-#     event_list: list[dict],
-#     task_list: list[dict],
-#     delete_task_list: list[dict],
-#     task_id: str,
-# ) -> list[dict]:
-#     parent_task = _get_parent_task(task_list, task_id)
-
-#     delete_task_id_list = [delete_task["DataType"] for delete_task in delete_task_list]
-
-#     # タスクが削除された場合親タスクにイベントを全て移動する
-#     update_list = [
-#         {**event, "DataValue": parent_task["DataType"]}
-#         for event in event_list
-#         if event["DataValue"] in delete_task_id_list
-#     ]
-
-#     parent_task["TaskInfo"]["children_task_id"].remove(task_id)
-#     update_list.append(parent_task)
-#     return update_list
-
-
-# def _get_parent_task(task_list: list[dict], task_id: str) -> dict:
-#     for task in task_list:
-#         if task_id in task["TaskInfo"]["children_task_id"]:
-#             return task
-
-
-# def _get_delete_task(task_list: list[dict], delete_task_id: str) -> list[dict]:
-#     task_dict = _create_task_dict(task_list)
-#     delete_task_list = []
-#     _add_delete_task(task_dict, delete_task_id, delete_task_list)
-#     return delete_task_list
-
-
-# def _add_delete_task(
-#     task_dict: dict, delete_task_id: str, delete_task_list: list[dict]
-# ):
-#     delete_task = task_dict[delete_task_id]
-#     delete_task_list.append(delete_task)
-#     children_task_id_list = delete_task["TaskInfo"]["children_task_id"]
-#     if len(children_task_id_list) == 0:
-#         return
-#     for child_task in children_task_id_list:
-#         _add_delete_task(task_dict, child_task, delete_task_list)
-
-
-# def _create_task_dict(task_list: list[dict]) -> dict:
-#     task_dict = {task["DataType"]: task for task in task_list}
-#     return task_dict

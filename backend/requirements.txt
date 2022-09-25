@@ -8,6 +8,7 @@ cattrs==22.1.0
 chalice==1.27.1
 click==8.1.2
 constructs==10.1.84
+dacite==1.6.0
 exceptiongroup==1.0.0rc8
 flake8==5.0.4
 iniconfig==1.1.1

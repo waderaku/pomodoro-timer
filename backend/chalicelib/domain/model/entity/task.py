@@ -14,6 +14,7 @@ ROOT_TASK_ID = "root"
 ROOT_TASK_NAME = "HOME"
 ROOT_TASK_ESTIMATED_WORKLOAD = timedelta(days=200 * 365)
 ROOT_TASK_INITIAL_WORKLOAD = timedelta(days=0)
+ROOT_TASK_PARENT_ID = ""
 
 
 @dataclass(frozen=True)
@@ -82,12 +83,11 @@ class Task:
         return cls(
             user_id=user_id,
             task_id=ROOT_TASK_ID,
-            parent_id=None,
             name=ROOT_TASK_NAME,
             shortcut_flg=False,
             children_task_id=[],
             done=False,
-            parent_id="",
+            parent_id=ROOT_TASK_PARENT_ID,
             event_id_list=[],
             finished_workload=ROOT_TASK_INITIAL_WORKLOAD,
             estimated_workload=ROOT_TASK_ESTIMATED_WORKLOAD,
