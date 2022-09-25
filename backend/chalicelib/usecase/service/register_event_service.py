@@ -1,22 +1,19 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import inject
+from chalicelib.domain.model.collection.task_tree import TaskTree
 from chalicelib.domain.model.entity.event import Event
 from chalicelib.domain.model.entity.task import Task
-from chalicelib.domain.model.value.task_tree import TaskTree
-from chalicelib.domain.repository.event_repository import EventRepository
-from chalicelib.domain.repository.task_repository import TaskRepository
+from chalicelib.domain.repository.repository import Repository
 
 
-@inject.params(task_tree_repository=TaskRepository)
-@inject.params(event_repository=EventRepository)
+@inject.params(repository=Repository)
 def register_event_service(
     user_id: str,
     task_id: str,
     start: datetime,
     end: datetime,
-    task_repository: TaskRepository,
-    event_repository: EventRepository,
+    repository: Repository,
 ):
     # TODO
     # Docstring修正
@@ -28,35 +25,18 @@ def register_event_service(
         start (datetime): 作業開始時間
         end (datetime): 作業終了時間
     """
-    task_tree = task_repository.fetch_task_tree(user_id)
-    # イベントが追加されるタスクとその祖先の取得
-    ancestor_list = _get_ancestor_list(task_id, task_tree)
+    task_tree = repository.task_repository.fetch_task_tree(user_id)
 
-    # 作業時間
-    workload = end - start
     # Event作成
     event = Event.create(user_id, task_id, start, end)
-    # 作業時間の計上
-    _add_workload(ancestor_list, workload, task_repository)
-    # イベントの登録
-    event_repository.register_event(event)
+    updated_task_list = _apply_event(task_tree, event)
+
+    with repository.batch_writer():
+        repository.event_repository.update_event(event)
+        for task in updated_task_list:
+            repository.task_repository.update_task(task)
 
 
-def _get_ancestor_list(task_id: str, task_tree: TaskTree) -> list[Task]:
-    task = task_tree.get_task(task_id)
-    ancestor_list = [task]
-    while not task.is_root():
-        task = task_tree.get_task(task.parent_id)
-        ancestor_list.append(task)
-    return ancestor_list
-
-
-def _add_workload(
-    ancestor_list: list[Task], workload: timedelta, task_repository: TaskRepository
-):
-    def add_workload(task: Task) -> Task:
-        new_task = task.update(finished_workload=task.finished_workload + workload)
-        return new_task
-
-    updated_task_list = [add_workload(ancestor) for ancestor in ancestor_list]
-    task_repository.batch_update_task(updated_task_list)
+def _apply_event(task_tree: TaskTree, event: Event) -> list[Task]:
+    workload = event.end - event.start
+    return task_tree.add_workload(event.task_id, workload)

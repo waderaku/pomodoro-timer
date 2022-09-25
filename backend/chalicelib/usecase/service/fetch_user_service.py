@@ -1,15 +1,13 @@
-from typing import Optional
-
 import inject
 from chalicelib.domain.exception.custom_exception import NoExistUserException
 from chalicelib.domain.model.entity.user import User
-from chalicelib.domain.repository.user_repository import UserRepository
+from chalicelib.domain.repository.repository import Repository
 
 
-@inject.params(user_repository=UserRepository)
-def fetch_user_service(
-    user_id: str, user_repository: Optional[UserRepository] = None
-) -> User:
+@inject.params(repository=Repository)
+def fetch_user_service(user_id: str, repository: Repository) -> User:
+    # TODO Docstring
+
     """ユーザIDに紐づくユーザ情報を取得する
 
     Args:
@@ -22,7 +20,7 @@ def fetch_user_service(
     Returns:
         User: 取得したユーザ
     """
-    user = user_repository.find_by_id(user_id=user_id)
+    user = repository.user_repository.find_by_id(user_id=user_id)
     if not user:
         raise NoExistUserException()
     return user
