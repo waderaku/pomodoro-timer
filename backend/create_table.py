@@ -3,6 +3,7 @@ from pathlib import Path
 
 import boto3
 
+from chalicelib.infrastructure.dynamodb import TABLE_NAME
 from chalicelib.util import load_env
 
 
@@ -11,7 +12,7 @@ def create_table():
         "dynamodb",
         endpoint_url=os.environ.get("DYNAMODB_ENDPOINT", None),
     )
-    table_name = "pomodoro_info"
+    table_name = TABLE_NAME
     table = resource.create_table(
         TableName=table_name,
         AttributeDefinitions=[
@@ -33,8 +34,7 @@ def create_table():
                 "Projection": {"ProjectionType": "ALL"},
             },
         ],
-        ProvisionedThroughput={
-            "ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
     )
     return table
 
