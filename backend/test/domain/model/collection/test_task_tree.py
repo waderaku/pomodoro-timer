@@ -4,9 +4,9 @@ import pytest
 from chalicelib.domain.model.collection.task_tree import TaskTree
 from chalicelib.domain.model.entity.task import ROOT_TASK_ID, Task
 
-TEST_TASK_LIST = [
-    Task.create_root("1"),
-    Task(
+TEST_TASK_DICT = {
+    "root": Task.create_root("1"),
+    "1": Task(
         user_id="1",
         task_id="1",
         name="test1",
@@ -20,7 +20,7 @@ TEST_TASK_LIST = [
         deadline=datetime.datetime.today(),
         notes="",
     ),
-    Task(
+    "2": Task(
         user_id="1",
         task_id="2",
         name="test1",
@@ -34,7 +34,7 @@ TEST_TASK_LIST = [
         deadline=datetime.datetime.today(),
         notes="",
     ),
-    Task(
+    "3": Task(
         user_id="1",
         task_id="3",
         name="test1",
@@ -48,7 +48,7 @@ TEST_TASK_LIST = [
         deadline=datetime.datetime.today(),
         notes="",
     ),
-    Task(
+    "4": Task(
         user_id="1",
         task_id="4",
         name="test1",
@@ -62,8 +62,8 @@ TEST_TASK_LIST = [
         deadline=datetime.datetime.today(),
         notes="",
     ),
-]
-task_tree = TaskTree(TEST_TASK_LIST)
+}
+task_tree = TaskTree(TEST_TASK_DICT)
 
 
 def test_get_task_scuuess():
