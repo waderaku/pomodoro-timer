@@ -42,13 +42,13 @@ class DynamoIO(BatchWriter):
     def __enter__(self):
         self._batch = self._table.batch_writer().__enter__()
 
-    def __exit__(self):
+    def __exit__(self, *args):
         self._batch = None
-        self._table.batch_writer().__exit__()
+        self._table.batch_writer().__exit__(*args)
 
     def _batch_or_table(self) -> DynamoTableProtocol:
-        if self._batch_writer.batch:
-            return self._batch_writer.batch
+        if self._batch:
+            return self._batch
         else:
             return self._table
 
