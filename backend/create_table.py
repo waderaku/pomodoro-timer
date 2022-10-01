@@ -3,7 +3,7 @@ from pathlib import Path
 
 import boto3
 
-from chalicelib.infrastructure.dynamodb import TABLE_NAME
+from chalicelib.infrastructure.dynamodb.util.get_table import TABLE_NAME
 from chalicelib.util import load_env
 
 
