@@ -40,11 +40,13 @@ class DynamoIO(BatchWriter):
         return [Model.from_dynamo_item(item) for item in item_list]
 
     def __enter__(self):
-        self._batch = self._table.batch_writer().__enter__()
+        self._batch_writer = self._table.batch_writer()
+        self._batch = self._batch_writer.__enter__()
 
     def __exit__(self, *args):
         self._batch = None
-        self._table.batch_writer().__exit__(*args)
+        self._batch_writer.__exit__(*args)
+        self._batch_writer = None
 
     def _batch_or_table(self) -> DynamoTableProtocol:
         if self._batch:

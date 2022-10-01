@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 from chalicelib.domain.model.entity.task import Task
@@ -39,9 +39,9 @@ class TaskDynamoModel(DynamoModel):
             parent_id=task.parent_id,
             shortcut_flg=task.shortcut_flg,
             children_task_id=task.children_task_id,
-            finished_workload=task.finished_workload,
-            estimated_workload=task.estimated_workload,
-            deadline=task.deadline,
+            finished_workload=Decimal(str(task.finished_workload.total_seconds())),
+            estimated_workload=Decimal(str(task.estimated_workload.total_seconds())),
+            deadline=task.deadline.isoformat(),
             notes=task.notes,
         )
         return cls(
@@ -64,7 +64,7 @@ class TaskDynamoModel(DynamoModel):
             estimated_workload=timedelta(
                 seconds=float(self.TaskInfo.estimated_workload)
             ),
-            deadline=self.TaskInfo.deadline,
+            deadline=datetime.fromisoformat(self.TaskInfo.deadline),
             notes=self.TaskInfo.notes,
         )
 
