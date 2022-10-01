@@ -5,6 +5,7 @@ from test.db_util import fetch_event, fetch_task
 
 import pytest
 from chalicelib.usecase.service.delete_task_service import delete_task_service
+from deepdiff import DeepDiff
 
 test_data_success_path = SERVICE_PATH.joinpath("test_delete_task_service_success.json")
 with test_data_success_path.open("r") as f:
@@ -23,7 +24,7 @@ def test_delete_task_success(test_data_success: dict):
     task_list = fetch_task(request["user_id"])
     event_list = fetch_event(request["user_id"])
     task_list.extend(event_list)
-    assert answer == task_list
+    assert not DeepDiff(answer, task_list, ignore_order=True)
 
 
 ##########タスク削除異常系テスト##############

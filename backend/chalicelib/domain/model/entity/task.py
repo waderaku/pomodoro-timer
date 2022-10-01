@@ -27,7 +27,6 @@ class Task:
     shortcut_flg: bool
     children_task_id: list[str]
     parent_id: str
-    event_id_list: list[str]
     done: bool
     finished_workload: timedelta
     estimated_workload: timedelta
@@ -45,16 +44,15 @@ class Task:
         user_id: str,
         name: str,
         parent_id: str,
-        estimated_workload: int,
+        estimated_workload: timedelta,
         deadline: datetime,
         notes: str,
         shortcut_flg: bool,
     ):
         task_id = str(uuid4())
         done = False
-        event_id_list = list()
         children_id_list = list()
-        finished_workload = 0.0
+        finished_workload = timedelta()
         return Task(
             user_id=user_id,
             task_id=task_id,
@@ -62,7 +60,6 @@ class Task:
             shortcut_flg=shortcut_flg,
             children_task_id=children_id_list,
             parent_id=parent_id,
-            event_id_list=event_id_list,
             done=done,
             finished_workload=finished_workload,
             estimated_workload=estimated_workload,
@@ -88,7 +85,6 @@ class Task:
             children_task_id=[],
             done=False,
             parent_id=ROOT_TASK_PARENT_ID,
-            event_id_list=[],
             finished_workload=ROOT_TASK_INITIAL_WORKLOAD,
             estimated_workload=ROOT_TASK_ESTIMATED_WORKLOAD,
             deadline="2200-12-31",
