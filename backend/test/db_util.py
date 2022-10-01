@@ -2,9 +2,8 @@ import os
 
 import boto3
 from boto3.dynamodb.conditions import Key
+from chalicelib.infrastructure.dynamodb.util.get_table import TABLE_NAME
 from create_table import create_table
-
-TABLE_NAME = "pomodoro_info"
 
 
 def _get_pomodoro_table():

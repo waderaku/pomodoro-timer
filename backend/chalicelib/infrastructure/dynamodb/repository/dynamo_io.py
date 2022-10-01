@@ -26,25 +26,27 @@ class DynamoIO(BatchWriter):
 
     def put_item(self, item: DynamoModel):
         table = self._batch_or_table()
-        table.put_item(item.as_dynamo_item())
+        table.put_item(Item=item.as_dynamo_item())
 
     def delete_item(self, key: DynamoKey):
         table = self._batch_or_table()
-        table.delete_item(key.as_dynamo_key())
+        table.delete_item(Key=key.as_dynamo_key())
 
     def get_item(self, key: DynamoKey, Model: type[T]) -> T:
-        return Model(**self._table.get_item(key.as_dynamo_key())["Item"])
+        return Model(**self._table.get_item(Key=key.as_dynamo_key())["Item"])
 
     def query(self, condition: ConditionBase, Model: type[T]) -> list[T]:
         item_list = self._table.query(KeyConditionExpression=condition)["Items"]
         return [Model.from_dynamo_item(item) for item in item_list]
 
     def __enter__(self):
-        self._batch = self._table.batch_writer().__enter__()
+        self._batch_writer = self._table.batch_writer()
+        self._batch = self._batch_writer.__enter__()
 
     def __exit__(self, *args):
         self._batch = None
-        self._table.batch_writer().__exit__(*args)
+        self._batch_writer.__exit__(*args)
+        self._batch_writer = None
 
     def _batch_or_table(self) -> DynamoTableProtocol:
         if self._batch:

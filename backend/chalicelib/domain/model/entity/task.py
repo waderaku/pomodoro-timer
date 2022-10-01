@@ -87,7 +87,7 @@ class Task:
             parent_id=ROOT_TASK_PARENT_ID,
             finished_workload=ROOT_TASK_INITIAL_WORKLOAD,
             estimated_workload=ROOT_TASK_ESTIMATED_WORKLOAD,
-            deadline="2200-12-31",
+            deadline=datetime(year=2200, month=12, day=31),
             notes="",
         )
 

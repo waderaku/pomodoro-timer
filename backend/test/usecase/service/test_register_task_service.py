@@ -5,7 +5,6 @@ from test.common import SERVICE_PATH, initial_process
 from test.db_util import fetch_deadline_task, fetch_task, fetch_task_by_task_id
 
 import pytest
-from chalicelib.usecase.service.register_event_service import register_event_service
 from chalicelib.usecase.service.register_task_service import register_task_service
 
 test_data_success_path = SERVICE_PATH.joinpath(
