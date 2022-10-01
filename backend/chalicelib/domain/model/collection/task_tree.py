@@ -56,7 +56,7 @@ class TaskTree:
             # 子タスクリストをqueueに追加
             task = self.get_task(task_id)
             id_list.extend(task.children_task_id)
-        return list(id_list)
+        return descendant_list
 
     def is_empty(self) -> bool:
         return len(self._tree_dict) == 0

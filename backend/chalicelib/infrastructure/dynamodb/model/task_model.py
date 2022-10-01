@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from decimal import ROUND_HALF_UP, Decimal
+from datetime import timedelta
+from decimal import Decimal
 
 from chalicelib.domain.model.entity.task import Task
 from chalicelib.infrastructure.dynamodb.model.dynamo_model import DynamoModel
@@ -13,21 +14,10 @@ class TaskInfoDynamoModel:
     shortcut_flg: bool
     parent_id: str
     children_task_id: list[str]
-    finished_workload: int
-    estimated_workload: int
+    finished_workload: Decimal
+    estimated_workload: Decimal
     deadline: str
     notes: str
-
-    def __post_init__(self):
-        self.finished_workload = self._quantize(self.finished_workload)
-        self.estimated_workload = self._quantize(self.estimated_workload)
-
-    def _quantize(self, float_variable: float) -> float:
-        return float(
-            Decimal(str(float_variable)).quantize(
-                Decimal("0.1"), rounding=ROUND_HALF_UP
-            )
-        )
 
 
 @dataclass
@@ -46,6 +36,7 @@ class TaskDynamoModel(DynamoModel):
         """
         task_info_model = TaskInfoDynamoModel(
             name=task.name,
+            parent_id=task.parent_id,
             shortcut_flg=task.shortcut_flg,
             children_task_id=task.children_task_id,
             finished_workload=task.finished_workload,
@@ -64,13 +55,17 @@ class TaskDynamoModel(DynamoModel):
         return Task(
             user_id=self.ID.split("_")[0],
             task_id=self.DataType,
-            parent_id=self.TaskInfo.parent_id,
             name=self.TaskInfo.name,
             shortcut_flg=self.TaskInfo.shortcut_flg,
             children_task_id=self.TaskInfo.children_task_id,
-            finished_workload=self.TaskInfo.finished_workload,
-            estimated_workload=self.TaskInfo.estimated_workload,
+            parent_id=self.TaskInfo.parent_id,
+            done=self.DataValue == "True",
+            finished_workload=timedelta(seconds=float(self.TaskInfo.finished_workload)),
+            estimated_workload=timedelta(
+                seconds=float(self.TaskInfo.estimated_workload)
+            ),
             deadline=self.TaskInfo.deadline,
+            notes=self.TaskInfo.notes,
         )
 
     def to_dynamo_input(self) -> dict:
