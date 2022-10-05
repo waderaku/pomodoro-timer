@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from decimal import Decimal
 from test.common import SERVICE_PATH, initial_process
-from test.db_util import fetch_deadline_task, fetch_task, scan_table
+from test.db_util import fetch_task, scan_table
 
 import pytest
 from chalicelib.usecase.service.update_task_service import update_task_service
@@ -49,15 +49,9 @@ def test_update_for_parent_task_success():
     update_task_service(**request)
 
     task_list = fetch_task(request["user_id"])
-    deadline_list = [
-        fetch_deadline_task(request["user_id"], task["DataType"]) for task in task_list
-    ]
+
     expected_task_list = list(filter(lambda record: "TaskInfo" in record, answer))
-    expected_deadline_list = list(
-        filter(lambda record: "_deadline" in record["DataType"], answer)
-    )
     assert expected_task_list == task_list
-    assert expected_deadline_list == deadline_list
 
 
 ##########ユーザー登録異常系テスト##############

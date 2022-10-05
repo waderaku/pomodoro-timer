@@ -99,10 +99,16 @@ class Task:
         Returns:
             Task: finished_workloadフィールドがworkloadだけ加算された新インスタンス
         """
-        return self.update_workload(self.finished_workload + workload)
+        return self.update_finished_workload(self.finished_workload + workload)
 
-    def update_workload(self, new_workload: timedelta) -> Task:
+    def update_finished_workload(self, new_workload: timedelta) -> Task:
         return replace(self, finished_workload=new_workload)
+
+    def update_estimated_workload(self, new_workload: timedelta) -> Task:
+        return replace(self, estimated_workload=new_workload)
+
+    def update_deadline(self, new_deadline: datetime) -> Task:
+        return replace(self, deadline=new_deadline)
 
     def delete_child(self, child_id: str) -> Task:
         children = deepcopy(self.children_task_id)
