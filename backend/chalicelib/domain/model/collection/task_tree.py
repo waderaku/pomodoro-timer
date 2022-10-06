@@ -55,7 +55,7 @@ class TaskTree:
 
         updated_ancestor_list = self._update_ancestor_task(task)
 
-        updated_descendant_task_list = self._update_descendant_task(task)
+        updated_descendant_task_list = self._update_descendant_task(task, [])
 
         return list(
             itertools.chain.from_iterable(
@@ -186,7 +186,7 @@ class TaskTree:
     def _update_descendant_task(
         self,
         updated_task: Task,
-        update_descendant_task_list: list[Task] = [],
+        update_descendant_task_list: list[Task],
     ) -> list[Task]:
         """更新済みのタスクに従い、そのタスクの「子孫」にその変更情報を伝播させる
         伝播させた結果、変更となった他のタスク情報を返却する
