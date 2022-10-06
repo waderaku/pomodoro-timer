@@ -101,6 +101,25 @@ class Task:
         """
         return self.update_finished_workload(self.finished_workload + workload)
 
+    def update_task_base_info(
+        self,
+        name: str,
+        estimated_workload: timedelta,
+        deadline: datetime,
+        notes: str,
+        done: bool,
+        shortcut_flg: bool,
+    ) -> Task:
+        return replace(
+            self,
+            name=name,
+            estimated_workload=estimated_workload,
+            deadline=deadline,
+            notes=notes,
+            done=done,
+            shortcut_flg=shortcut_flg,
+        )
+
     def update_finished_workload(self, new_workload: timedelta) -> Task:
         return replace(self, finished_workload=new_workload)
 
@@ -109,6 +128,12 @@ class Task:
 
     def update_deadline(self, new_deadline: datetime) -> Task:
         return replace(self, deadline=new_deadline)
+
+    def finish(self) -> Task:
+        return replace(self, done=True)
+
+    def resume(self) -> Task:
+        return replace(self, done=False)
 
     def delete_child(self, child_id: str) -> Task:
         children = deepcopy(self.children_task_id)
