@@ -27,7 +27,6 @@ class Task:
     shortcut_flg: bool
     children_task_id: list[str]
     parent_id: str
-    event_id_list: list[str]
     done: bool
     finished_workload: timedelta
     estimated_workload: timedelta
@@ -45,16 +44,15 @@ class Task:
         user_id: str,
         name: str,
         parent_id: str,
-        estimated_workload: int,
+        estimated_workload: timedelta,
         deadline: datetime,
         notes: str,
         shortcut_flg: bool,
     ):
         task_id = str(uuid4())
         done = False
-        event_id_list = list()
         children_id_list = list()
-        finished_workload = 0.0
+        finished_workload = timedelta()
         return Task(
             user_id=user_id,
             task_id=task_id,
@@ -62,7 +60,6 @@ class Task:
             shortcut_flg=shortcut_flg,
             children_task_id=children_id_list,
             parent_id=parent_id,
-            event_id_list=event_id_list,
             done=done,
             finished_workload=finished_workload,
             estimated_workload=estimated_workload,
@@ -88,10 +85,9 @@ class Task:
             children_task_id=[],
             done=False,
             parent_id=ROOT_TASK_PARENT_ID,
-            event_id_list=[],
             finished_workload=ROOT_TASK_INITIAL_WORKLOAD,
             estimated_workload=ROOT_TASK_ESTIMATED_WORKLOAD,
-            deadline="2200-12-31",
+            deadline=datetime(year=2200, month=12, day=31),
             notes="",
         )
 
@@ -103,10 +99,41 @@ class Task:
         Returns:
             Task: finished_workloadフィールドがworkloadだけ加算された新インスタンス
         """
-        return self.update_workload(self.finished_workload + workload)
+        return self.update_finished_workload(self.finished_workload + workload)
 
-    def update_workload(self, new_workload: timedelta) -> Task:
+    def update_task_base_info(
+        self,
+        name: str,
+        estimated_workload: timedelta,
+        deadline: datetime,
+        notes: str,
+        done: bool,
+        shortcut_flg: bool,
+    ) -> Task:
+        return replace(
+            self,
+            name=name,
+            estimated_workload=estimated_workload,
+            deadline=deadline,
+            notes=notes,
+            done=done,
+            shortcut_flg=shortcut_flg,
+        )
+
+    def update_finished_workload(self, new_workload: timedelta) -> Task:
         return replace(self, finished_workload=new_workload)
+
+    def update_estimated_workload(self, new_workload: timedelta) -> Task:
+        return replace(self, estimated_workload=new_workload)
+
+    def update_deadline(self, new_deadline: datetime) -> Task:
+        return replace(self, deadline=new_deadline)
+
+    def finish(self) -> Task:
+        return replace(self, done=True)
+
+    def resume(self) -> Task:
+        return replace(self, done=False)
 
     def delete_child(self, child_id: str) -> Task:
         children = deepcopy(self.children_task_id)

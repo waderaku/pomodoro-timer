@@ -34,7 +34,9 @@ def delete_task_service(user_id: str, task_id: str, repository: Repository):
     # イベントの所属するタスクを削除対象のタスクの親に差し替え
     updated_parent = parent.delete_child(task_id)
     event_list = repository.event_repository.fetch_by_user_id(user_id)
-    updated_event_list = _replace_parent(event_list, parent.task_id)
+    updated_event_list = _replace_event_task_id(
+        event_list, parent.task_id, delete_task_id_list
+    )
 
     with repository.batch_writer():
         for desc_id in delete_task_id_list:
@@ -44,5 +46,21 @@ def delete_task_service(user_id: str, task_id: str, repository: Repository):
             repository.event_repository.update_event(event)
 
 
-def _replace_parent(event_list: list[Event], parent_id: str) -> list[Event]:
-    return [event.update_task_id(parent_id) for event in event_list]
+def _replace_event_task_id(
+    event_list: list[Event], update_task_id: str, target_task_id_list: list[str]
+) -> list[Event]:
+    """対象となるタスクIDに紐づくeventのタスクIDを変更する
+
+    Args:
+        event_list (list[Event]): 変更対象のイベント一覧
+        update_task_id (str): 変更するタスクID
+        target_task_id_list (list[str]): 変更の対象となるタスクID
+
+    Returns:
+        list[Event]: 変更したイベント一覧
+    """
+    return [
+        event.update_task_id(update_task_id)
+        for event in event_list
+        if event.task_id in target_task_id_list
+    ]

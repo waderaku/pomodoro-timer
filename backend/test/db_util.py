@@ -2,9 +2,8 @@ import os
 
 import boto3
 from boto3.dynamodb.conditions import Key
+from chalicelib.infrastructure.dynamodb.util.get_table import TABLE_NAME
 from create_table import create_table
-
-TABLE_NAME = "pomodoro_info"
 
 
 def _get_pomodoro_table():
@@ -35,25 +34,12 @@ def fetch_task(user_id: str) -> list[dict]:
     return table.query(KeyConditionExpression=Key("ID").eq(f"{user_id}_task"))["Items"]
 
 
-def fetch_deadline_task(user_id: str, task_id: str) -> dict:
-    table = _get_pomodoro_table()
-    return table.get_item(
-        Key={"ID": f"{user_id}", "DataType": f"{task_id}_deadline"}
-    ).get("Item", {})
-
-
-def fetch_task_by_task_id(user_id: str, task_id: str) -> list[dict]:
+def fetch_task_by_task_id(user_id: str, task_id: str) -> dict:
     table = _get_pomodoro_table()
     task = table.get_item(Key={"ID": f"{user_id}_task", "DataType": task_id}).get(
         "Item", {}
     )
-    task_deadline = table.get_item(
-        Key={"ID": user_id, "DataType": f"{task_id}_deadline"}
-    ).get("Item", {})
-    task_name = table.get_item(Key={"ID": user_id, "DataType": f"{task_id}_name"}).get(
-        "Item", {}
-    )
-    return [task_deadline, task_name, task]
+    return task
 
 
 def fetch_event(user_id: str) -> list[dict]:
