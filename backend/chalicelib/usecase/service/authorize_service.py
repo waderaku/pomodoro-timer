@@ -1,9 +1,9 @@
 import inject
-from chalicelib.domain.repository.repository import Repository
 from chalicelib.domain.exception.custom_exception import (
     ExpiredTokenException,
     NoExistTokenException,
 )
+from chalicelib.domain.repository.repository import Repository
 
 
 @inject.params(repository=Repository)

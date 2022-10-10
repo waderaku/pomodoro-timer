@@ -1,27 +1,25 @@
-from dataclasses import asdict
 from typing import Optional
 
 from chalicelib.domain.model.entity.user import User
 from chalicelib.domain.repository.user_repository import UserRepository
-from chalicelib.infrastructure.dynamodb.model.user_model import UserInfoModel, UserModel
-from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
-    DynamoRepository,
-)
+from chalicelib.infrastructure.dynamodb.model.user_model import UserModel
+from chalicelib.infrastructure.dynamodb.repository.dynamo_io import DynamoIO
+from chalicelib.infrastructure.dynamodb.repository.dynamo_key import DynamoKey
 
 
-class UserDynamoRepository(UserRepository, DynamoRepository):
+class UserDynamoRepository(UserRepository):
     """DynamoDBに登録されているユーザとやり取りをするリポジトリの実装クラス"""
 
+    def __init__(self, dynamo_io: DynamoIO):
+        self._dynamo_io = dynamo_io
+
     def find_by_id(self, user_id: str) -> Optional[User]:
-        user_dict = self._table.get_item(Key={"ID": user_id, "DataType": "user"}).get(
-            "Item", None
-        )
-        if not user_dict:
+        key = DynamoKey(user_id, "user")
+        user = self._dynamo_io.get_item(key, UserModel)
+        if user is not None:
+            return user.to_user()
+        else:
             return None
-        user_model = UserModel(
-            ID=user_dict["ID"], UserInfo=UserInfoModel(**user_dict["UserInfo"])
-        )
-        return user_model.to_user()
 
     def register_user(self, user: User):
         self._put_user(user)
@@ -30,5 +28,5 @@ class UserDynamoRepository(UserRepository, DynamoRepository):
         self._put_user(user)
 
     def _put_user(self, user: User):
-        user_model = UserModel.to_model(user)
-        self._table.put_item(Item=asdict(user_model))
+        dynamo_model = UserModel.from_user(user)
+        self._dynamo_io.put_item(dynamo_model)

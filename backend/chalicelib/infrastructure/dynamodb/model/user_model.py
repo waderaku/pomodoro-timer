@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from typing import Optional
+from chalicelib.infrastructure.dynamodb.model.dynamo_model import DynamoModel
 
 from chalicelib.domain.model.entity.authorizer import AuthInfo
 from chalicelib.domain.model.entity.user import User
@@ -19,7 +20,7 @@ class UserInfoModel:
 
 
 @dataclass
-class UserModel:
+class UserModel(DynamoModel):
     ID: str
     UserInfo: UserInfoModel
     DataType: str = "user"
@@ -61,7 +62,7 @@ class UserModel:
         )
 
     @classmethod
-    def to_model(cls, user: User) -> UserModel:
+    def from_user(cls, user: User) -> UserModel:
         """ドメインのユーザオブジェクトをDBに登録する形式に変換する
 
         Args:

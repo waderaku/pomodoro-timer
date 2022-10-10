@@ -6,7 +6,7 @@ from chalicelib.domain.repository.auth_token_repository import AuthTokenReposito
 from chalicelib.domain.repository.repository import Repository
 
 
-@inject.params(auth_token_repository=AuthTokenRepository)
+@inject.params(repository=Repository)
 def clean_token_service(
     repository: Repository,
 ) -> Optional[list[AuthToken]]:

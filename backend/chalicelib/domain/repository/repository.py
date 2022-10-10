@@ -8,6 +8,7 @@ from chalicelib.domain.repository.auth_user_repository import (
 )
 from chalicelib.domain.repository.event_repository import EventRepository
 from chalicelib.domain.repository.task_repository import TaskRepository
+from chalicelib.domain.repository.task_user_repository import TaskUserRepository
 from chalicelib.domain.repository.user_repository import UserRepository
 
 
@@ -35,6 +36,11 @@ class Repository(ABC):
     @property
     @abstractmethod
     def user_repository(self) -> UserRepository:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def task_user_repository(self) -> TaskUserRepository:
         raise NotImplementedError
 
     @abstractmethod

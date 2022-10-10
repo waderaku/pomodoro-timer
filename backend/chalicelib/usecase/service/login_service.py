@@ -7,7 +7,7 @@ from chalicelib.domain.repository.repository import Repository
 
 
 @inject.params(
-    repositor=Repository,
+    repository=Repository,
 )
 def login_service(
     user_id: str,

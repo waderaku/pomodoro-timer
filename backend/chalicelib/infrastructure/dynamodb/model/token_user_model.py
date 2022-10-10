@@ -2,20 +2,21 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from chalicelib.infrastructure.dynamodb.model.dynamo_model import DynamoModel
 
-from chalicelib.domain.model.entity.token_user import TokenAuthorizer
+from chalicelib.domain.model.entity.token_user import TokenUser
 from chalicelib.domain.model.value.auth_token import AuthToken
 
 
 @dataclass
-class TokenUserModel:
+class TokenUserModel(DynamoModel):
     ID: str
     DataType: str
     DataValue: str
     Deadline: str
 
     @classmethod
-    def to_model(cls, token_user: TokenAuthorizer) -> TokenUserModel:
+    def from_token_user(cls, token_user: TokenUser) -> TokenUserModel:
         return cls(
             ID="token",
             DataType=token_user._auth_token.value,
@@ -23,9 +24,9 @@ class TokenUserModel:
             Deadline=token_user._auth_token.deadline.isoformat(),
         )
 
-    def to_token_user(self) -> TokenAuthorizer:
+    def to_token_user(self) -> TokenUser:
         auth_token = self.to_auth_token()
-        return TokenAuthorizer(self.DataValue, auth_token)
+        return TokenUser(self.DataValue, auth_token)
 
     def to_auth_token(self) -> AuthToken:
         return AuthToken(self.DataType, datetime.fromisoformat(self.Deadline))
