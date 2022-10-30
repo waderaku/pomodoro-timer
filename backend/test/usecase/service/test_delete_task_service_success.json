@@ -35,7 +35,7 @@
           "parent_id": "",
           "finished_workload": 105120000,
           "estimated_workload": 105120000,
-          "deadline": "2200-12-31",
+          "deadline": "2200-12-31T00:00:00",
           "notes": ""
         }
       },
@@ -50,7 +50,7 @@
           "parent_id": "root",
           "finished_workload": 90,
           "estimated_workload": 150,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": "備考を記載"
         }
       },
@@ -65,7 +65,7 @@
           "parent_id": "1",
           "finished_workload": 30,
           "estimated_workload": 50,
-          "deadline": "2022-04-08",
+          "deadline": "2022-04-08T00:00:00",
           "notes": ""
         }
       },
@@ -80,7 +80,7 @@
           "parent_id": "1",
           "finished_workload": 40,
           "estimated_workload": 60,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": ""
         }
       },
@@ -95,7 +95,7 @@
           "parent_id": "3",
           "finished_workload": 40,
           "estimated_workload": 60,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": ""
         }
       },
@@ -110,7 +110,7 @@
           "parent_id": "root",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       },
@@ -125,7 +125,7 @@
           "parent_id": "5",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       }
@@ -146,7 +146,7 @@
           "parent_id": "",
           "finished_workload": 105120000,
           "estimated_workload": 105120000,
-          "deadline": "2200-12-31",
+          "deadline": "2200-12-31T00:00:00",
           "notes": ""
         }
       },
@@ -161,7 +161,7 @@
           "parent_id": "root",
           "finished_workload": 90,
           "estimated_workload": 150,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": "備考を記載"
         }
       },
@@ -176,7 +176,7 @@
           "parent_id": "1",
           "finished_workload": 30,
           "estimated_workload": 50,
-          "deadline": "2022-04-08",
+          "deadline": "2022-04-08T00:00:00",
           "notes": ""
         }
       },
@@ -187,11 +187,11 @@
         "TaskInfo": {
           "name": "子タスク2",
           "shortcut_flg": false,
-          "children_task_id": ["4"],
+          "children_task_id": [],
           "parent_id": "1",
           "finished_workload": 40,
           "estimated_workload": 60,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": ""
         }
       },
@@ -206,7 +206,7 @@
           "parent_id": "root",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       },
@@ -221,7 +221,7 @@
           "parent_id": "5",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       }
@@ -242,28 +242,30 @@
         }
       },
       {
+        "ID": "2",
+        "DataType": "user2",
+        "UserInfo": {
+          "is_google_linked": false,
+          "default_length": {
+            "work": 25,
+            "rest": 5
+          }
+        }
+      },
+      {
         "ID": "1_task",
         "DataType": "root",
         "DataValue": "False",
         "TaskInfo": {
-          "name": "全ての親タスク",
+          "name": "HOME",
           "shortcut_flg": false,
-          "children_task_id": ["1"],
-          "finished_workload": 130,
-          "estimated_workload": 230,
-          "deadline": "2022-04-09",
+          "children_task_id": ["1", "5"],
+          "parent_id": "",
+          "finished_workload": 105120000,
+          "estimated_workload": 105120000,
+          "deadline": "2200-12-31T00:00:00",
           "notes": ""
         }
-      },
-      {
-        "ID": "1",
-        "DataType": "1_name",
-        "DataValue": "親タスク1"
-      },
-      {
-        "ID": "1",
-        "DataType": "1_deadline",
-        "DataValue": "2022-04-09"
       },
       {
         "ID": "1_task",
@@ -273,21 +275,12 @@
           "name": "親タスク1",
           "shortcut_flg": true,
           "children_task_id": ["2", "3"],
+          "parent_id": "root",
           "finished_workload": 90,
           "estimated_workload": 150,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": "備考を記載"
         }
-      },
-      {
-        "ID": "1",
-        "DataType": "2_name",
-        "DataValue": "子タスク1"
-      },
-      {
-        "ID": "1",
-        "DataType": "2_deadline",
-        "DataValue": "2022-04-08"
       },
       {
         "ID": "1_task",
@@ -297,21 +290,12 @@
           "name": "子タスク1",
           "shortcut_flg": false,
           "children_task_id": [],
+          "parent_id": "1",
           "finished_workload": 30,
           "estimated_workload": 50,
-          "deadline": "2022-04-08",
+          "deadline": "2022-04-08T00:00:00",
           "notes": ""
         }
-      },
-      {
-        "ID": "1",
-        "DataType": "3_name",
-        "DataValue": "子タスク2"
-      },
-      {
-        "ID": "1",
-        "DataType": "3_deadline",
-        "DataValue": "2022-04-09"
       },
       {
         "ID": "1_task",
@@ -321,21 +305,12 @@
           "name": "子タスク2",
           "shortcut_flg": false,
           "children_task_id": ["4"],
+          "parent_id": "1",
           "finished_workload": 40,
           "estimated_workload": 60,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": ""
         }
-      },
-      {
-        "ID": "1",
-        "DataType": "4_name",
-        "DataValue": "孫タスク1"
-      },
-      {
-        "ID": "1",
-        "DataType": "4_deadline",
-        "DataValue": "2022-04-09"
       },
       {
         "ID": "1_task",
@@ -345,33 +320,12 @@
           "name": "孫タスク1",
           "shortcut_flg": false,
           "children_task_id": [],
+          "parent_id": "3",
           "finished_workload": 40,
           "estimated_workload": 60,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": ""
         }
-      },
-      {
-        "ID": "2",
-        "DataType": "user2",
-        "UserInfo": {
-          "name": "ユーザ2",
-          "is_google_linked": false,
-          "default_length": {
-            "work": 25,
-            "rest": 5
-          }
-        }
-      },
-      {
-        "ID": "1",
-        "DataType": "5_name",
-        "DataValue": "親タスク2"
-      },
-      {
-        "ID": "1",
-        "DataType": "5_deadline",
-        "DataValue": "2022-04-15"
       },
       {
         "ID": "1_task",
@@ -381,21 +335,12 @@
           "name": "親タスク2",
           "shortcut_flg": true,
           "children_task_id": ["6"],
+          "parent_id": "root",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
-      },
-      {
-        "ID": "1",
-        "DataType": "6_name",
-        "DataValue": "子タスク3"
-      },
-      {
-        "ID": "1",
-        "DataType": "6_deadline",
-        "DataValue": "2022-04-15"
       },
       {
         "ID": "1_task",
@@ -405,9 +350,10 @@
           "name": "子タスク3",
           "shortcut_flg": false,
           "children_task_id": [],
+          "parent_id": "5",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       },
@@ -415,19 +361,28 @@
         "ID": "1_event",
         "DataType": "2022-04-18T22:16:39.287433",
         "DataValue": "5",
-        "EndTime": "2022-04-18T22:41:39.287433"
+        "EventInfo": {
+          "event_id": "1",
+          "end": "2022-04-18T22:41:39.287433"
+        }
       },
       {
         "ID": "1_event",
         "DataType": "2022-04-20T22:16:39.287433",
         "DataValue": "3",
-        "EndTime": "2022-04-20T22:41:39.287433"
+        "EventInfo": {
+          "event_id": "2",
+          "end": "2022-04-20T22:41:39.287433"
+        }
       },
       {
         "ID": "1_event",
         "DataType": "2022-04-21T22:16:39.287433",
         "DataValue": "4",
-        "EndTime": "2022-04-21T22:41:39.287433"
+        "EventInfo": {
+          "event_id": "3",
+          "end": "2022-04-21T22:41:39.287433"
+        }
       }
     ],
     "request": {
@@ -437,15 +392,31 @@
     "answer": [
       {
         "ID": "1_task",
+        "DataType": "root",
+        "DataValue": "False",
+        "TaskInfo": {
+          "name": "HOME",
+          "shortcut_flg": false,
+          "children_task_id": ["1", "5"],
+          "parent_id": "",
+          "finished_workload": 105120000,
+          "estimated_workload": 105120000,
+          "deadline": "2200-12-31T00:00:00",
+          "notes": ""
+        }
+      },
+      {
+        "ID": "1_task",
         "DataType": "1",
         "DataValue": "False",
         "TaskInfo": {
           "name": "親タスク1",
           "shortcut_flg": true,
           "children_task_id": ["2"],
+          "parent_id": "root",
           "finished_workload": 90,
           "estimated_workload": 150,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-09T00:00:00",
           "notes": "備考を記載"
         }
       },
@@ -457,9 +428,10 @@
           "name": "子タスク1",
           "shortcut_flg": false,
           "children_task_id": [],
+          "parent_id": "1",
           "finished_workload": 30,
           "estimated_workload": 50,
-          "deadline": "2022-04-08",
+          "deadline": "2022-04-08T00:00:00",
           "notes": ""
         }
       },
@@ -471,9 +443,10 @@
           "name": "親タスク2",
           "shortcut_flg": true,
           "children_task_id": ["6"],
+          "parent_id": "root",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       },
@@ -485,23 +458,10 @@
           "name": "子タスク3",
           "shortcut_flg": false,
           "children_task_id": [],
+          "parent_id": "5",
           "finished_workload": 40,
           "estimated_workload": 80,
-          "deadline": "2022-04-15",
-          "notes": ""
-        }
-      },
-      {
-        "ID": "1_task",
-        "DataType": "root",
-        "DataValue": "False",
-        "TaskInfo": {
-          "name": "全ての親タスク",
-          "shortcut_flg": false,
-          "children_task_id": ["1"],
-          "finished_workload": 130,
-          "estimated_workload": 230,
-          "deadline": "2022-04-09",
+          "deadline": "2022-04-15T00:00:00",
           "notes": ""
         }
       },
@@ -509,19 +469,28 @@
         "ID": "1_event",
         "DataType": "2022-04-18T22:16:39.287433",
         "DataValue": "5",
-        "EndTime": "2022-04-18T22:41:39.287433"
+        "EventInfo": {
+          "event_id": "1",
+          "end": "2022-04-18T22:41:39.287433"
+        }
       },
       {
         "ID": "1_event",
         "DataType": "2022-04-20T22:16:39.287433",
         "DataValue": "1",
-        "EndTime": "2022-04-20T22:41:39.287433"
+        "EventInfo": {
+          "event_id": "2",
+          "end": "2022-04-20T22:41:39.287433"
+        }
       },
       {
         "ID": "1_event",
         "DataType": "2022-04-21T22:16:39.287433",
         "DataValue": "1",
-        "EndTime": "2022-04-21T22:41:39.287433"
+        "EventInfo": {
+          "event_id": "3",
+          "end": "2022-04-21T22:41:39.287433"
+        }
       }
     ]
   }

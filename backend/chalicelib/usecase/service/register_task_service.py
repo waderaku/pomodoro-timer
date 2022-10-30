@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import inject
 from chalicelib.domain.exception.custom_exception import (
@@ -35,22 +35,18 @@ def register_task_service(
         user_id=user_id,
         parent_id=parent_id,
         name=name,
-        estimated_workload=estimated_workload,
+        estimated_workload=timedelta(seconds=estimated_workload),
         deadline=deadline,
         notes=notes,
         shortcut_flg=shortcut_flg,
     )
-
     try:
-        parent = task_tree.get_parent(task.task_id)
+        updated_task_list = task_tree.add_task(task)
     except NoExistTaskException:
         raise NoExistParentTaskException()
 
-    updated_parent = parent.add_child(task.task_id)
-    updated_ancestor_list = task_tree.update_task_estimated_workload(task)
-
     with repository.batch_writer():
         repository.task_repository.register_task(task)
-        repository.task_repository.update_task(updated_parent)
-        for ancestor in updated_ancestor_list:
-            repository.task_repository.update_task(ancestor)
+        for updated_task in updated_task_list:
+            repository.task_repository.update_task(updated_task)
+    return task

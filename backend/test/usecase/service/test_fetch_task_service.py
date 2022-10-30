@@ -1,6 +1,6 @@
 import json
 from dataclasses import asdict
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 from test.common import SERVICE_PATH, initial_process
 
@@ -18,7 +18,7 @@ with test_data_failed_path.open("r") as f:
     test_data_failed_list: list = json.load(f, parse_float=Decimal)
 
 
-def convert_workload_to_timedelta(data_list: list[dict]):
+def convert_to_correct_type(data_list: list[dict]):
     [
         data.update(
             {
@@ -28,6 +28,7 @@ def convert_workload_to_timedelta(data_list: list[dict]):
                 "estimated_workload": timedelta(
                     seconds=float(data["estimated_workload"])
                 ),
+                "deadline": datetime.fromisoformat(data["deadline"]),
             }
         )
         for data in data_list
@@ -39,8 +40,8 @@ def convert_workload_to_timedelta(data_list: list[dict]):
 def test_fetch_task_success(test_data_success: dict):
     request, answer = initial_process(test_data_success)
 
-    # answerの時間をtimedeltaに変換
-    convert_workload_to_timedelta(answer)
+    # answerの時間をtimedeltaに,deadlineをdatetime変換
+    convert_to_correct_type(answer)
 
     task_list = fetch_task_service(**request)
     assert not DeepDiff(answer, [asdict(task) for task in task_list], ignore_order=True)
@@ -48,7 +49,7 @@ def test_fetch_task_success(test_data_success: dict):
 
 ##########タスク取得異常系テスト##############
 @pytest.mark.parametrize("test_data_failed", test_data_failed_list)
-def test_fetch_event_failed(test_data_failed: dict):
+def test_fetch_task_failed(test_data_failed: dict):
     request, answer = initial_process(test_data_failed)
 
     with pytest.raises(Exception) as e:
