@@ -1,7 +1,7 @@
 from typing import Optional
 
 from chalicelib.domain.model.entity.authorizer import AuthInfo
-from chalicelib.domain.repository.auth_user_repository import (
+from chalicelib.domain.repository.password_authorizer_repository import (
     PasswordAuthorizerRepository,
 )
 from chalicelib.infrastructure.dynamodb.model.user_model import UserModel
@@ -17,6 +17,6 @@ class PasswordAuthorizerDynamoRepository(PasswordAuthorizerRepository):
         key = DynamoKey(user_id, "user")
         authInfo_dynamo = self._dynamo_io.get_item(key, UserModel)
         if authInfo_dynamo is not None:
-            return authInfo_dynamo.to_auth_user()
+            return authInfo_dynamo.to_auth_info()
         else:
             return None

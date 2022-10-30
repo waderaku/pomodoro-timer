@@ -10,7 +10,9 @@ class TaskUserDynamoRepository(TaskUserRepository):
         self._dynamo_io = dynamo_io
 
     def register_task_user(self, task_user: TaskUser):
-        user_model = UserModel.from_user(task_user._user)
+        user_model = UserModel.from_user_and_auth_info(
+            task_user._user, task_user._auth_info
+        )
         task_model_list = [
             TaskDynamoModel.from_task(task=task) for task in task_user._task_list
         ]

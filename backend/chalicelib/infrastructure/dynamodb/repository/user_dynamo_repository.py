@@ -20,13 +20,3 @@ class UserDynamoRepository(UserRepository):
             return user.to_user()
         else:
             return None
-
-    def register_user(self, user: User):
-        self._put_user(user)
-
-    def update_user(self, user: User):
-        self._put_user(user)
-
-    def _put_user(self, user: User):
-        dynamo_model = UserModel.from_user(user)
-        self._dynamo_io.put_item(dynamo_model)

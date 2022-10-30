@@ -5,7 +5,6 @@ from typing import Optional
 from chalicelib.domain.exception.custom_exception import NotSettingConfigException
 from chalicelib.domain.model.value.default_length import DefaultLength
 from chalicelib.domain.model.value.google_config import GoogleConfig
-from chalicelib.domain.model.value.password import Password
 
 
 class User:
@@ -15,16 +14,14 @@ class User:
         is_google_linked: bool,
         default_length: DefaultLength,
         google_config: Optional[GoogleConfig],
-        password: Optional[Password] = None,
     ):
         self._user_id = user_id
-        self._password = password
         self._is_google_linked = is_google_linked
         self._default_length = default_length
         self._google_config = google_config
 
     @classmethod
-    def create(cls, user_id: str, plain_password: str) -> User:
+    def create(cls, user_id: str) -> User:
         """ユーザオブジェクトの新規作成をする.
         初期のタイマー設定時間は作業時間が25分、休憩時間が5分とする
         Googleとの連携はない状態とする
@@ -36,11 +33,9 @@ class User:
         Returns:
             User:新規作成されたユーザオブジェクト
         """
-        hashed_password = Password(value=plain_password, is_hashed=False)
 
         return cls(
             user_id=user_id,
-            password=hashed_password,
             is_google_linked=False,
             default_length=DefaultLength(25, 5),
             google_config=None,

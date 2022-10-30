@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
 from chalicelib.domain.repository.repository import Repository
 from chalicelib.domain.repository.task_repository import TaskRepository
 from chalicelib.domain.repository.user_repository import UserRepository
 from chalicelib.infrastructure.dynamodb.repository.auth_token_dynamo_repository import (
     AuthTokenDynamoRepository,
+)
+from chalicelib.infrastructure.dynamodb.repository.auth_user_dynamo_repository import (
+    AuthUserDynamoRepository,
 )
 from chalicelib.infrastructure.dynamodb.repository.dynamo_io import DynamoIO
 from chalicelib.infrastructure.dynamodb.repository.event_dynamo_repository import (
@@ -42,6 +46,7 @@ class DynamoRepository(Repository):
         self._auth_token_repository = AuthTokenDynamoRepository(self._io)
         self._user_repository = UserDynamoRepository(self._io)
         self._task_user_repository = TaskUserDynamoRepository(self._io)
+        self._auth_user_repository = AuthUserDynamoRepository(self._io)
 
     @property
     def task_repository(self) -> TaskRepository:
@@ -66,6 +71,10 @@ class DynamoRepository(Repository):
     @property
     def user_repository(self) -> UserRepository:
         return self._user_repository
+
+    @property
+    def auth_user_repository(self) -> AuthUserRepository:
+        return self._auth_user_repository
 
     def batch_writer(self) -> DynamoIO:
         return self._io

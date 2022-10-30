@@ -17,21 +17,3 @@ class UserRepository(ABC):
             Optional[User]: 取得したユーザ
         """
         raise NotImplementedError()
-
-    @abstractmethod
-    def register_user(self, user: User):
-        """ユーザをDBに登録する
-
-        Args:
-            user (User): 登録するユーザ
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def update_user(self, user: User):
-        """登録されているユーザを更新する
-
-        Args:
-            user (User): 更新するユーザ
-        """
-        raise NotImplementedError()

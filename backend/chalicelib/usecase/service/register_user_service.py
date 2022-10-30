@@ -1,5 +1,3 @@
-from typing import Optional
-
 import inject
 from chalicelib.domain.exception.custom_exception import AlreadyExistUserException
 from chalicelib.domain.model.entity.task_user import TaskUser

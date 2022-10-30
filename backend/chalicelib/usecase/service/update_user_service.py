@@ -30,8 +30,8 @@ def update_user_service(
         NoExistUserException: 更新対象のユーザが存在しないことを示す例外
     """
     # 存在チェック
-    user = repository.user_repository.find_by_id(user_id=user_id)
-    if not user:
+    auth_user = repository.auth_user_repository.find_by_id(user_id=user_id)
+    if not auth_user:
         raise NoExistUserException()
 
     # ユーザの更新
@@ -41,9 +41,9 @@ def update_user_service(
             Calendar(**google_config["calendar"]),
             TaskList(**google_config["task_list"]),
         )
-    user.update(
+    auth_user.update(
         is_google_linked=is_google_linked,
         default_length=default_length,
         google_config=google_config,
     )
-    repository.user_repository.update_user(user)
+    repository.auth_user_repository.update_user(auth_user)
