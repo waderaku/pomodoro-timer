@@ -39,11 +39,12 @@
                 "DataValue": "False",
                 "TaskInfo": {
                     "name": "HOME",
+                    "parent_id": "",
                     "shortcut_flg": false,
                     "children_task_id": [],
-                    "finished_workload": 105120000,
-                    "estimated_workload": 105120000,
-                    "deadline": "2200-12-31",
+                    "finished_workload": 0.0,
+                    "estimated_workload": 6307200000.0,
+                    "deadline": "2200-12-31T00:00:00",
                     "notes": ""
                 }
             }

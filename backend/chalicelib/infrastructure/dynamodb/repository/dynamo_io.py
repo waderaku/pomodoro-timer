@@ -32,8 +32,12 @@ class DynamoIO(BatchWriter):
         table = self._batch_or_table()
         table.delete_item(Key=key.as_dynamo_key())
 
-    def get_item(self, key: DynamoKey, Model: type[T]) -> T:
-        return Model(**self._table.get_item(Key=key.as_dynamo_key())["Item"])
+    def get_item(self, key: DynamoKey, Model: type[T]) -> Optional[T]:
+        dynamo_item = self._table.get_item(Key=key.as_dynamo_key())
+        if "Item" in dynamo_item:
+            return Model.from_dynamo_item(dynamo_item["Item"])
+        else:
+            return None
 
     def query(self, condition: ConditionBase, Model: type[T]) -> list[T]:
         item_list = self._table.query(KeyConditionExpression=condition)["Items"]

@@ -1,20 +1,24 @@
-from chalicelib.domain.repository.auth_user_repository import (
-    PasswordAuthorizerRepository,
-)
-from chalicelib.infrastructure.dynamodb.model.user_model import UserInfoModel, UserModel
-from chalicelib.infrastructure.dynamodb.repository.dynamo_repository import (
-    DynamoRepository,
-)
+from chalicelib.domain.model.entity.auth_user import AuthUser
+from chalicelib.domain.repository.auth_user_repository import AuthUserRepository
+from chalicelib.infrastructure.dynamodb.model.user_model import UserModel
+from chalicelib.infrastructure.dynamodb.repository.dynamo_io import DynamoIO
+from chalicelib.infrastructure.dynamodb.repository.dynamo_key import DynamoKey
 
 
-class AuthUserDynamoRepository(PasswordAuthorizerRepository, DynamoRepository):
+class AuthUserDynamoRepository(AuthUserRepository):
+    def __init__(self, dynamo_io: DynamoIO):
+        self._dynamo_io = dynamo_io
+
     def find_by_id(self, user_id: str):
-        user_dict = self._table.get_item(Key={"ID": user_id, "DataType": "user"}).get(
-            "Item", None
-        )
-        if not user_dict:
+        key = DynamoKey(user_id, "user")
+        auth_user_dynamo = self._dynamo_io.get_item(key, UserModel)
+        if auth_user_dynamo is not None:
+            return auth_user_dynamo.to_auth_user()
+        else:
             return None
-        user_model = UserModel(
-            ID=user_dict["ID"], UserInfo=UserInfoModel(**user_dict["UserInfo"])
+
+    def update_user(self, auth_user: AuthUser):
+        dynamo_model = UserModel.from_user_and_auth_info(
+            auth_user._user, auth_user._auth_info
         )
-        return user_model.to_auth_user()
+        self._dynamo_io.put_item(dynamo_model)

@@ -1,18 +1,16 @@
-from typing import Optional
-
 import inject
 from chalicelib.domain.exception.custom_exception import AlreadyExistUserException
 from chalicelib.domain.model.entity.task_user import TaskUser
-from chalicelib.domain.repository.task_user_repository import TaskUserRepository
-from chalicelib.domain.repository.user_repository import UserRepository
+from chalicelib.domain.repository.repository import Repository
 
 
-@inject.params(task_user_repository=TaskUserRepository, user_repository=UserRepository)
+@inject.params(
+    repository=Repository,
+)
 def register_user_service(
     user_id: str,
     password: str,
-    task_user_repository: Optional[TaskUserRepository] = None,
-    user_repository: Optional[UserRepository] = None,
+    repository: Repository,
 ):
     """新規にユーザーデータを登録する
 
@@ -24,9 +22,9 @@ def register_user_service(
         AlreadyExistUserException: 既に対象のユーザーが存在する場合に発行される例外
     """
     # 存在チェック
-    if user_repository.find_by_id(user_id=user_id):
+    if repository.user_repository.find_by_id(user_id=user_id):
         raise AlreadyExistUserException()
 
     # 新規登録
     task_user = TaskUser.create(user_id, password=password)
-    task_user_repository.register_task_user(task_user=task_user)
+    repository.task_user_repository.register_task_user(task_user=task_user)

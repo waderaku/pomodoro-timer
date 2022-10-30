@@ -1,16 +1,17 @@
 import inject
-from chalicelib.domain.repository.repository import Repository
 from chalicelib.domain.exception.custom_exception import (
     ExpiredTokenException,
     NoExistTokenException,
 )
+from chalicelib.domain.model.entity.token_user import TokenUser
+from chalicelib.domain.repository.repository import Repository
 
 
 @inject.params(repository=Repository)
 def authorize_service(
     token: str,
     repository: Repository,
-) -> str:
+) -> TokenUser:
     # TODO Docstring
     auth_token_repository = repository.auth_token_repository
     token_user = auth_token_repository.find_token_user_by_token(token)

@@ -2,11 +2,10 @@ from typing import Optional
 
 import inject
 from chalicelib.domain.model.value.auth_token import AuthToken
-from chalicelib.domain.repository.auth_token_repository import AuthTokenRepository
 from chalicelib.domain.repository.repository import Repository
 
 
-@inject.params(auth_token_repository=AuthTokenRepository)
+@inject.params(repository=Repository)
 def clean_token_service(
     repository: Repository,
 ) -> Optional[list[AuthToken]]:

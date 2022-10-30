@@ -4,16 +4,18 @@ import inject
 from chalicelib.domain.exception.custom_exception import NoExistUserException
 from chalicelib.domain.model.value.default_length import DefaultLength
 from chalicelib.domain.model.value.google_config import Calendar, GoogleConfig, TaskList
-from chalicelib.domain.repository.user_repository import UserRepository
+from chalicelib.domain.repository.repository import Repository
 
 
-@inject.params(user_repository=UserRepository)
+@inject.params(
+    repository=Repository,
+)
 def update_user_service(
+    repository: Repository,
     user_id: str,
     is_google_linked: bool,
     default_length: dict[str, int],
     google_config: Optional[dict[str, dict]] = None,
-    user_repository: Optional[UserRepository] = None,
 ):
     """ユーザ情報の更新を行う
 
@@ -28,8 +30,8 @@ def update_user_service(
         NoExistUserException: 更新対象のユーザが存在しないことを示す例外
     """
     # 存在チェック
-    user = user_repository.find_by_id(user_id=user_id)
-    if not user:
+    auth_user = repository.auth_user_repository.find_by_id(user_id=user_id)
+    if not auth_user:
         raise NoExistUserException()
 
     # ユーザの更新
@@ -39,9 +41,9 @@ def update_user_service(
             Calendar(**google_config["calendar"]),
             TaskList(**google_config["task_list"]),
         )
-    user.update(
+    auth_user.update(
         is_google_linked=is_google_linked,
         default_length=default_length,
         google_config=google_config,
     )
-    user_repository.update_user(user)
+    repository.auth_user_repository.update_user(auth_user)
